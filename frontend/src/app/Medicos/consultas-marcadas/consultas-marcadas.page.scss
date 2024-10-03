@@ -1,0 +1,54 @@
+* {
+    font-family: 'Montserrat Alternates', sans-serif;
+}
+
+ion-content {
+    --background: rgb(212, 212, 212);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+ion-toolbar {
+    --background: linear-gradient(45deg, #7b77a9, #2eb4cc);
+    --color: #fff;
+
+    --min-height: 30px;
+    --padding-top: 5px;
+    --padding-bottom: 5px;
+}
+
+ion-searchbar {
+    --background: #ebebeb;
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Sombra da input */
+    border-radius: 10px;
+    /* Arredondamento da input */
+}
+
+ion-card {
+    background: #fff;
+    color: black;
+    border-radius: 25px;
+    box-shadow: inset;
+
+    ion-card-title,
+    ion-card-subtitle {
+        color: #333;
+    }
+}
+
+ion-list {
+    background: rgb(212, 212, 212);
+    color: black;
+}
+
+ion-label {
+    color: black;
+}
+
+ion-icon {
+    color: black;
+}

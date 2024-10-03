@@ -1,0 +1,66 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/paciente"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Marque sua Consulta!
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <div class="especialidade" *ngIf="especialidades && especialidades.length > 0" lines="none">
+    <ion-label position="stacked">Selecione a especialidade:</ion-label>
+    <ion-select placeholder="especialidade..." [(ngModel)]="selectedEspecialidade" (ionChange)="buscarMedicosPorEspecialidade()" interface="popover">
+      <ion-select-option *ngFor="let especialidade of especialidades" [value]="especialidade.Especialidade">{{ especialidade.Especialidade }}</ion-select-option>
+    </ion-select>
+  </div>
+  
+  
+  <div class="medicos"  lines="none">
+    <ion-label position="stacked">Selecione o médico:</ion-label>
+
+    <div *ngIf="medicos.length > 0" lines="none">
+      <ion-select placeholder="médico..." interface="popover" [(ngModel)]="selectedMedicoId" (ionChange)="onMedicoChange($event)">
+        <ion-select-option *ngFor="let medico of medicos" [value]="medico.CRM">{{ medico.Nome }}</ion-select-option>
+      </ion-select>
+    </div>
+
+    <div *ngIf="medicos.length === 0 && selectedEspecialidade" lines="none">
+      <ion-label position="floating">Nenhum médico disponível</ion-label>
+    </div>
+  </div>  
+  
+
+  
+  <div class="calendario">
+    <ion-datetime 
+    [(ngModel)]="selectedDate" 
+    [isDateEnabled]="isWeekday" 
+    [min]="minDate" 
+    [max]="maxDate"
+    (ionChange)="onDateChange($event)"
+    presentation="date"></ion-datetime>    
+  </div>
+
+  <div class="divHor">
+    <div class="horario">
+      <ion-label position="stacked">Selecione o horário desejado da consulta:</ion-label>
+        <ion-select aria-label="Selecione o horário desejado" interface="popover" placeholder="Horario..." [(ngModel)]="selectedTime">
+          <ion-select-option *ngFor="let slot of timeSlots" [value]="slot.time" [disabled]="!slot.available">
+            {{ slot.time }}
+          </ion-select-option>
+        </ion-select>
+    </div>
+  </div>
+
+  <div class="button-wrapper">
+    <ion-button class="custom-ok-button" fill="clear" (click)="marcarConsulta()" >Verificar dados</ion-button>
+    <ion-button class="custom-cancel-button" fill="clear" (click)="limparSelecoes()" >Rededifir</ion-button>
+  </div>
+
+</ion-content>

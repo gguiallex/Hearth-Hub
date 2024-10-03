@@ -1,0 +1,111 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-back-button default-href="/home-adm"></ion-back-button>
+            </ion-buttons>
+            <ion-title>GERENCIAMENTO</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        
+        <ion-content [fullscreen]="true">
+          <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterResults()" placeholder="Pesquisar"></ion-searchbar>
+        
+          <ion-select multiple="true" [(ngModel)]="selectedOptions" (ionChange)="updateSelection()">
+            <ion-select-option value="enfermeiros">Enfermeiros</ion-select-option>
+            <ion-select-option value="medicos">Médicos</ion-select-option>
+            <ion-select-option value="pacientes">Pacientes</ion-select-option>
+          </ion-select>
+          
+        
+             <h1 *ngIf="filteredEnfermeiros.length > 0" >Enfermeiros</h1>
+            <div class="enfermeiros" *ngFor="let enfermeiro of filteredEnfermeiros">
+              <ion-item button (click)="showEnfermeiroDetails(enfermeiro)">
+                {{ enfermeiro.Nome }}
+              </ion-item>
+            </div>
+        
+        
+            <h1 *ngIf="filteredMedicos.length > 0">Médicos</h1>
+            <div class="medicos" *ngFor="let medico of filteredMedicos">
+              <ion-item button (click)="showMedicoDetails(medico)">
+                {{ medico.Nome }}
+              </ion-item>
+            </div>
+          
+            <h1 *ngIf="filteredPacientes.length > 0">Pacientes</h1>
+            <div class="pacientes" *ngFor="let paciente of filteredPacientes">
+              <ion-item button (click)="showPacienteDetails(paciente)">
+                {{ paciente.Nome }}
+              </ion-item>
+            </div>
+
+            <ion-modal #detailModal>
+              <ng-template>
+                <ion-content>
+                  <ion-toolbar>
+                    <ion-title>Detalhes do Usuário</ion-title>
+                    <ion-buttons slot="end">
+                      <ion-button (click)="detailModal.dismiss()">Fechar</ion-button>
+                    </ion-buttons>
+                  </ion-toolbar>
+          
+                  <div *ngIf="selectedEnfermeiro">
+                    <div class="detail-item">
+                      <ion-label>Enfermeiro(a): </ion-label>
+                      <p>{{selectedEnfermeiro}}</p>
+                    </div>
+                    <div class="detail-item">
+                      <ion-label>COREN: </ion-label>
+                      <p>{{selectedCOREN}}</p>
+                    </div>
+                    <div class="detail-item">
+                      <ion-label>Situação: </ion-label>
+                      <p>{{selectedSituacao}}</p>
+                    </div>
+                </div>
+        
+                <div *ngIf="selectedMedico" >
+                  <div class="detail-item">
+                    <ion-label>Médico(a): </ion-label>
+                    <p>{{selectedMedico}}</p>
+                  </div>
+                  <div class="detail-item">
+                    <ion-label>CRM: </ion-label>
+                    <p>{{selectedCRM}}</p>
+                  </div>
+                  <div class="detail-item">
+                    <ion-label>Especialidade: </ion-label>
+                    <p>{{selectedEsp}}</p>
+                  </div>
+                  <div class="detail-item">
+                    <ion-label>Situação: </ion-label>
+                    <p>{{selectedSituacao}}</p>
+                  </div>
+              </div>
+        
+              <div *ngIf="selectedPaciente">
+                <div class="detail-item">
+                  <ion-label>Paciente: </ion-label>
+                  <p>{{selectedPaciente}}</p>
+                </div>
+                <div class="detail-item">
+                  <ion-label>CPF: </ion-label>
+                  <p>{{selectedCPF}}</p>
+                </div>
+                <div class="detail-item">
+                  <ion-label>Situação: </ion-label>
+                  <p>{{selectedSituacao}}</p>
+                </div>
+            </div>
+        
+            <div class="Situação">
+            <ion-label>Bloquear</ion-label>
+            <ion-toggle [checked]="selectedSituacao === 'Validado'" (ionChange)="toggleSituacao($event)" aria-label="Enable Notifications"></ion-toggle>
+            <ion-label>Validar</ion-label>
+          </div> 
+        
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+        </ion-content>

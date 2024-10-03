@@ -1,0 +1,81 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/medico"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Consultas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-searchbar debounce="500" (ionInput)="filtrarConsultasPorNome($event)"></ion-searchbar>
+
+  <ion-list>
+    <ion-list-header (click)="toggleConsultasDoDia()">
+      <ion-label>Consultas do Dia</ion-label>
+      <ion-icon [name]="mostrarConsultasDoDia ? 'chevron-up' : 'chevron-down'"></ion-icon>
+    </ion-list-header>
+    <div *ngIf="mostrarConsultasDoDia">
+      <div *ngIf="dia.length === 0">
+        <p>Não há nenhuma consulta para o dia de hoje.</p>
+      </div>
+    <ion-card  *ngFor="let consulta of dia" (click)="confirmarCriacaoExame(consulta)" >
+      <ion-card-header>
+        <ion-card-title>{{ mostrarNome(consulta.CPF) }}</ion-card-title>
+        <ion-card-subtitle>{{consulta.CPF}}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        {{ formatarData(consulta.data) }} - {{ consulta.Horario }}
+      </ion-card-content>
+    </ion-card>
+  </div>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header (click)="toggleConsultasFuturas()">
+      <ion-label>Consultas Futuras</ion-label>
+      <ion-icon [name]="mostrarConsultasFuturas ? 'chevron-up' : 'chevron-down'"></ion-icon>
+    </ion-list-header>
+    <div *ngIf="mostrarConsultasFuturas">
+      <div *ngIf="futuro.length === 0">
+        <p>Não há nenhuma consulta agendada futuramente.</p>
+      </div>
+    <ion-card *ngFor="let consulta of futuro">
+      <ion-card-header>
+        <ion-card-title>{{ mostrarNome(consulta.CPF) }}</ion-card-title>
+        <ion-card-subtitle>{{consulta.CPF}}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        {{ formatarData(consulta.data) }} - {{ consulta.Horario }}
+      </ion-card-content>
+    </ion-card>
+  </div>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header (click)="toggleConsultasJaFeitas()">
+      <ion-label>Consultas Já Feitas</ion-label>
+      <ion-icon [name]="mostrarConsultasJaFeitas ? 'chevron-up' : 'chevron-down'"></ion-icon>
+    </ion-list-header>
+    <div *ngIf="mostrarConsultasJaFeitas" >
+      <div *ngIf="passado.length === 0">
+        <p>Não há nenhuma consulta já feita</p>
+      </div>
+    <ion-card *ngFor="let consulta of passado">
+      <ion-card-header>
+        <ion-card-title>{{ mostrarNome(consulta.CPF) }}</ion-card-title>
+        <ion-card-subtitle>{{consulta.CPF}}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        {{ formatarData(consulta.data) }} - {{ consulta.Horario }}
+      </ion-card-content>
+    </ion-card>
+  </div>
+  </ion-list>
+  <ion-infinite-scroll>
+    <ion-infinite-scroll-content loadingText="Please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

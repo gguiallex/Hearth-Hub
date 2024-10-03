@@ -1,0 +1,105 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/enfermeiro"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Exames Pendentes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="Pacientes" lines="none">
+
+    <div *ngIf="pacientes.length > 0" lines="none">
+      <ion-label position="stacked">Selecione o paciente:</ion-label>
+      <ion-select placeholder="paciente..." interface="popover" [(ngModel)]="selectedPacienteCPF"
+        (ionChange)="buscarExamesDoPaciente()">
+        <ion-select-option *ngFor="let paciente of pacientes" [value]="paciente.CPF">{{ paciente.Nome
+          }}</ion-select-option>
+      </ion-select>
+    </div>
+
+    <div class="exames" lines="none">
+
+        <div class="pendentes" *ngIf="consultasPendentes.length > 0" lines="none">
+
+          <h1 position="floating">Consulta com exames pendentes</h1>
+
+          <ion-list>
+            <ion-item-group *ngFor="let consulta of consultasPendentes">
+              <ion-item-divider>
+                <ion-label>Consulta: {{ consulta.IdConsulta }}</ion-label>
+              </ion-item-divider>
+              <ion-item *ngFor="let exame of consulta.exames">
+                <ion-checkbox slot="end" aria-label="Exames Pendentes"
+                [checked]="exame.Status === 'Realizado'"
+                  [disabled]="exame.Status === 'Realizado'"
+                (ionChange)="marcarExame(exame, $event.detail.checked)"></ion-checkbox>
+                <ion-label (click)="toggleDetalhes($event, exame)">
+                  <h2>{{ exame.NomeExame }}<ion-icon
+                      [name]="exame.mostrarDetalhes ? 'chevron-up' : 'chevron-down'"></ion-icon></h2>
+                  <div *ngIf="exame.mostrarDetalhes">
+                    <p><strong>Código do Exame:</strong> {{ exame.CodExames }}</p>
+                    <p><strong>Descrição:</strong> {{ exame.DescExame }}</p>
+                    <p><strong>Medico(a):</strong> {{ exame.NomeMedico }}</p>
+                    <p><strong>Data de Prescrição:</strong> {{ exame.DataPrescricao }}</p>
+                    <p><strong>Status:</strong> {{ exame.Status }}</p>
+                  </div>
+                </ion-label>
+              </ion-item>
+            </ion-item-group>
+          </ion-list>
+
+          <div class="botoes">
+            <ion-button fill="clear" (click)="atualizarExames()" >Atualizar</ion-button> <ion-button (click)="limpar()" fill="clear" >Limpar</ion-button>
+          </div>
+
+        </div>
+
+        <div class="nenhumExamePendente" *ngIf="consultasPendentes.length === 0 && consultasRealizadas.length > 0" lines="none">
+          <h3 position="floating">Nenhum exame pendente</h3>
+        </div>
+
+        <div class="realizadas" *ngIf="consultasRealizadas.length > 0" lines="none">
+
+          <h1 position="floating">Exames realizados</h1>
+
+          <ion-list>
+            <div class="consultas">
+
+              <ion-item-group *ngFor="let consulta of consultasRealizadas">
+
+                <ion-item-divider>
+                  <ion-label>Consulta: {{ consulta.IdConsulta }}</ion-label>
+                </ion-item-divider>
+
+                <ion-item *ngFor="let exame of consulta.exames">
+                  <ion-label (click)="toggleDetalhes($event, exame)">
+                    <h2>{{ exame.NomeExame }}<ion-icon
+                        [name]="exame.mostrarDetalhes ? 'chevron-up' : 'chevron-down'"></ion-icon></h2>
+                    <div *ngIf="exame.mostrarDetalhes">
+                      <p><strong>Descrição:</strong> {{ exame.DescExame }}</p>
+                      <p><strong>Medico(a):</strong> {{ exame.NomeMedico }}</p>
+                      <p><strong>Enfermeiro(a):</strong> {{ exame.NomeEnfermeiro }}</p>
+                      <p><strong>Data de Prescrição:</strong> {{ exame.DataPrescricao }}</p>
+                      <p><strong>Data de Realização:</strong> {{ exame.DataRealizacao }}</p>
+                      <p><strong>Status:</strong> {{ exame.Status }}</p>
+                    </div>
+                  </ion-label>
+                </ion-item>
+
+              </ion-item-group>
+
+          </div>
+          </ion-list>
+
+        </div>
+
+      <div class="semExames" *ngIf="consultasPendentes.length === 0 && consultasRealizadas.length === 0 && selectedPacienteCPF" lines="none">
+        <ion-label position="floating">O paciente não possui exames cadastrados</ion-label>
+      </div>
+
+    </div>
+  </div>
+</ion-content>

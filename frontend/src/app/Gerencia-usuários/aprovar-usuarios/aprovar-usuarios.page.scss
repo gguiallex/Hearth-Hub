@@ -1,0 +1,151 @@
+* {
+    font-family: "Montserrat Alternates" ,sans-serif;
+  }
+  
+  ion-toolbar {
+      --background: linear-gradient(45deg, #7b77a9, #2eb4cc);
+      --color: #fff;
+    
+      --min-height: 30px;
+      --padding-top: 5px;
+      --padding-bottom: 5px;
+    }
+  
+    ion-select{
+      color: #333;
+    }
+  
+    h1{
+      color:#333;
+      text-align: center;
+    }
+  
+    ion-item{
+      --background: rgb(212, 212, 212);;
+      color: #333;
+      font-size: 24px;
+      padding: 0;
+    }
+  
+    ion-searchbar{
+      --background: #ebebeb;
+      color:#333;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra da input */
+      border-radius: 10px; /* Arredondamento da input */
+    }
+  
+    ion-content {
+      --background:  rgb(212, 212, 212);  /* Gradiente de cores para o background */
+      display: flex;
+      justify-content: center; /* Centralizar na horizontal */
+      align-items: center; /* Centralizar na vertical */
+      height: 100vh; /* Altura total da viewport */
+    }
+  
+    ion-tab-bar, ion-tab-button{
+      background-color: rgb(212, 212, 212);
+      color: #333;
+    }
+  
+    ion-modal::part(content) {
+      height: 70%;
+      border-radius: 16px;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+  
+    ion-modal::part(backdrop) {
+      backdrop-filter: blur(10px); /* Aumente o valor para mais desfoque */
+      --backdrop-opacity: 0.8; /* Ajuste a opacidade se necessário */
+      background-color: rgba(0, 0, 0, 0.6); /* Cor preta com 60% de opacidade */
+    }
+    
+    ion-modal ion-toolbar {
+      --background: linear-gradient(45deg, #7b77a9, #2eb4cc);
+      --color: rgb(212, 212, 212);;
+    }
+  
+    .detail-item{
+      color:#333;
+      font-size: 20px;
+      margin-top: 20px;
+      margin-left: 10px;
+    }
+    
+    .custom-reg-button{
+      font-size: 16px;
+      border-radius: 30px;
+      background-color:#2eb4cc71;
+      color: #000000;
+      border: 3px solid transparent;
+      transition: background-color 0.3s ease;
+    }
+    
+    .custom-reg-button:hover{
+      background-color: #2397ab;
+    }
+
+    ion-button {
+      height: 100%;
+    }
+    
+    ion-icon {
+      font-size: 24px; /* Aumenta o tamanho do ícone */
+    }
+
+    .nome{
+      font-family: 'Montserrat Alternates', sans-serif;
+      border-right: 1px solid #000000;
+      margin: 0;
+    }
+
+    .aceitar{
+      color:green;
+      padding-left: 15px;
+    }
+
+    .apagar{
+      color:red;
+      padding-left: 15px;
+    }
+
+    .aceitar, .apagar{
+      width: auto;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      //border: 1px solid #000000;
+    }
+  
+    .Situação{
+      color: #333;
+      font-size: larger;
+    }
+  
+    ion-toggle {
+      padding: 12px;
+    
+      --track-background: #ddd;
+      --track-background-checked: #ddd;
+    
+      --handle-background: #eb7769;
+      --handle-background-checked: #95c34e;
+    
+      --handle-width: 25px;
+      --handle-height: 27px;
+      --handle-max-height: auto;
+      --handle-spacing: 6px;
+    
+      --handle-border-radius: 4px;
+      --handle-box-shadow: none;
+    }
+    
+    ion-toggle::part(track) {
+      height: 10px;
+      width: 65px;
+    
+      overflow: visible;
+    }
+
+    
+  

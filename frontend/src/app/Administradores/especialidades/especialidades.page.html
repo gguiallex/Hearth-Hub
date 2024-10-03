@@ -1,0 +1,98 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="/home-adm"></ion-back-button>
+    </ion-buttons>
+    <ion-title>ESPECIALIDADES</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" fixed-slot-placement="before">
+  <ion-searchbar placeholder="Ex: Pediatria" [debounce]="1000" (ionInput)="handleInput($event)"></ion-searchbar>
+
+  <div class="Especialidades" *ngFor="let especialidade of filteredEspecialidades">
+    <ion-item button (click)="showEspecialidadeDetails(especialidade)">
+      {{ especialidade.Especialidade }}
+
+
+    </ion-item>
+  </div>
+
+
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+      <ion-fab-button id="open-modal">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <ion-modal #modal trigger="open-modal">
+      <ng-template>
+        <ion-content>
+          <ion-toolbar>
+            <ion-title>Adicionar Especialidade</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modal.dismiss()">Fechar</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+
+            <ion-input label="Codigo da especialidade" type="name" [(ngModel)]="CodEsp" label-placement="floating" maxlength="3"></ion-input>
+            <div class="char-counter">{{CodEsp.length || 0}} / 3</div>
+            <ion-input label="Especialidade" type="name" [(ngModel)]="Especialidade" label-placement="floating"></ion-input>
+            <ion-textarea label="Descrição" type="text" [(ngModel)]="desc" label-placement="floating"></ion-textarea>
+
+            <ion-button class="custom-reg-button" fill="clear" expand="block" type="submit" (click)="criarEsp()">Criar</ion-button>
+
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+    <ion-modal #detailModal>
+      <ng-template>
+        <ion-content>
+          <ion-toolbar>
+            <ion-title>Detalhes da Especialidade</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="detailModal.dismiss()">Fechar</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+  
+          <div class="detail-item">
+            <ion-label>Código da Especialidade: </ion-label>
+            <ion-input [(ngModel)]="selectedCodEsp" [disabled]="!editMode"></ion-input>
+          </div>
+          <div class="detail-item">
+            <ion-label>Especialidade: </ion-label>
+            <ion-input [(ngModel)]="selectedEsp" [disabled]="!editMode"></ion-input>
+          </div>
+          <div class="detail-item">
+            <ion-label>Descrição: </ion-label>
+            <ion-textarea [(ngModel)]="selectedDesc" [disabled]="!editMode"></ion-textarea>
+          </div>
+
+          <br>
+
+          <div class="botoes">
+  
+          <ion-button *ngIf="!editMode"  class="custom-reg-button" fill="clear"  (click)="editEspecialidade()">
+            <ion-icon name="brush-outline" ></ion-icon>
+            Editar</ion-button>
+
+          <ion-button *ngIf="!editMode" class="custom-reg-button" fill="clear" (click)="deleteEspecialidade()">
+            <ion-icon name="trash-bin-outline"></ion-icon>
+            Excluir</ion-button>
+
+          <ion-button *ngIf="editMode"  class="custom-reg-button" fill="clear"  (click)="updateEspecialidade()">
+            <ion-icon name="checkmark-outline" ></ion-icon>
+            Salvar</ion-button>
+
+          <ion-button *ngIf="editMode"  class="custom-reg-button" fill="clear"  (click)="cancelEspecialidade()">
+            <ion-icon name="close-outline" ></ion-icon>
+            Cancelar</ion-button>
+
+          </div>
+  
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+</ion-content>

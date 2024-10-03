@@ -1,0 +1,85 @@
+* {
+    font-family: 'Montserrat Alternates', sans-serif;
+}
+
+ion-content {
+    --background: rgb(212, 212, 212);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h1, h3 {
+    text-align: center;
+    color: black;
+}
+
+ion-toolbar {
+    --background: linear-gradient(45deg, #7b77a9, #2eb4cc);
+    --color: #fff;
+
+    --min-height: 30px;
+    --padding-top: 5px;
+    --padding-bottom: 5px;
+}
+
+.Pacientes{
+    margin: 20px 10px;
+}
+
+.exames{
+    margin-top: 20px;
+}
+
+.consultas{
+    border: 25px;
+    ion-item-divider{
+        border: 25px;
+        color: black;
+        background-color: white;
+    }
+}
+
+ion-label, ion-select, ion-select-option{
+    font-size: 20px;
+    margin: 10px;
+    color: black;
+  }
+
+  ion-list {
+    ion-item {
+        --background: rgb(212, 212, 212);
+        
+        color: black;
+        h2{
+            color: black;
+            font-size: 17px;
+        }
+        p{
+            color: #333;
+        }
+      }
+    background: rgb(212, 212, 212);
+    color: black;
+}
+
+    .botoes {
+        display: flex;
+        justify-content: space-evenly; /* Espaço igual entre os botões */
+        width: 100%; /* Largura total */
+
+        ion-button{
+            font-size: 16px;
+            border-radius: 30px; /* Valor alto para criar bordas circulares */
+            background-color: #2eb4cc; /* Cor do botão de login */
+            color: #000000; /* Cor do texto do botão de login */
+            border: 3px solid transparent;
+            transition: background-color 0.3s ease;
+        }
+
+        ion-button:hover{
+            border-radius: 30px;
+            background-color: #2397ab;
+        }
+    }

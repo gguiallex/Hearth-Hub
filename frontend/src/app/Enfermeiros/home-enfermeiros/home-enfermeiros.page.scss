@@ -1,0 +1,107 @@
+* {
+    font-family: 'Montserrat Alternates', sans-serif;
+}
+
+ion-content {
+    --background: linear-gradient(45deg, #7b77a9, #2eb4cc);
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.titulo-menu {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.5;
+    margin: 20px 0px 20px 24%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.boasVindas{
+    text-align: center;
+    color: black;
+    padding: 10px 20px 10px 20px;
+    margin: 0;
+  }
+
+  ion-img {
+    width: 300px;
+    height: 300px;
+    background-color: white;
+    border-radius: 50%;
+    margin: 20px auto; /* Isso garante espaçamento vertical e centralização horizontal */
+    display: block;
+}
+
+ion-toolbar {
+    --background: #ffffff;
+    --color: #333;
+    --font-size: 50px;
+
+    --min-height: 30px;
+    --padding-top: 5px;
+    --padding-bottom: 5px;
+}
+
+.ion-padding {
+    color: azure;
+}
+
+ion-item.opcoes {
+    font-family: 'Montserrat Alternates', sans-serif;
+    --background: #fff;
+    --color: #333;
+
+    --border-color: #fff;
+    --border-style: inset;
+    --border-width: 2px;
+
+    --border-radius: 5px;
+
+    --detail-icon-color: rgb(33, 100, 207);
+    --detail-icon-opacity: 1;
+    --detail-icon-font-size: 25px;
+}
+
+ion-item.opcoes ion-icon {
+    color: var(--detail-icon-color);
+    /* Define a cor do ícone */
+    font-size: var(--detail-icon-font-size);
+    /* Define o tamanho do ícone */
+}
+
+ion-item.opcoes:active {
+    --background: #2eb4cc;
+    /* Define a cor de fundo ao clicar */
+}
+
+    ion-card{
+      display: flex;
+     flex-direction: column;
+      background: #fff;
+      color:black;
+      border-radius: 25px;
+      box-shadow: inset;
+  
+      ion-card-title, ion-card-subtitle{
+          color:#333;
+      }
+
+      ion-button{
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        margin-left: 25%;
+      }
+  }
+  
+  ion-list{
+      background: rgb(212, 212, 212);
+      color:black;
+  }

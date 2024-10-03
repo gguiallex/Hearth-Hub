@@ -1,0 +1,80 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="/home-adm"></ion-back-button>
+    </ion-buttons>
+    <ion-title>INSPECIONAR</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="tudo">
+    <p class="titulo">Selecione o tipo de usuário que você deseja inspecionar</p>
+
+    <div class="tipo">
+      <ion-select label="Tipo:" labelPlacement="floating" interface="popover" (ionChange)="selectOption($event.detail.value)">
+        <ion-select-option value="Médico">Médico(a)</ion-select-option>
+        <ion-select-option value="Enfermeiro(a)">Enfermeiro(a)</ion-select-option>
+        <ion-select-option value="Paciente">Paciente</ion-select-option>
+      </ion-select>
+    </div>
+
+    <div *ngIf="!selectedOption" class="Teste">
+      <ion-img src="../../assets/images/pngegg (2).png" class="rounded-image"></ion-img>
+      <p>Aqui você visualizará os gráficos dos usuários que você deseja inspecionar</p>
+    </div>
+    
+    <br>
+
+    <div class="medicos" lines="none" *ngIf="selectedOption === 'Médico'">
+      <ion-label position="stacked">Nome:</ion-label>
+      <ion-select labelPlacement="floating" interface="popover" [(ngModel)]="selectedMedico">
+        <ion-select-option *ngFor="let medico of medicos" [value]="medico">{{ medico.Nome }}</ion-select-option>
+      </ion-select>
+
+      <br>
+
+      <ion-label position="stacked">Data de Início:</ion-label>
+      <ion-input type="month" [max]="maxDate" [(ngModel)]="dataInicio" placeholder="Selecione a data de início"></ion-input>
+
+      <ion-label position="stacked">Data do Fim:</ion-label>
+      <ion-input type="month" [max]="maxDate" [(ngModel)]="dataFim" placeholder="Selecione a data de fim"></ion-input>
+
+      <ion-button class="custom-login-button" expand="block" fill="clear" type="submit" (click)="gerarGraficoMedico()">Gerar Gráfico</ion-button>
+      <ion-button class="custom-del-button" fill="clear" type="submit" (click)="apagarGrafico()">Apagar Gráfico</ion-button>
+      <ion-button class="custom-login-button" fill="clear" type="submit" (click)="baixarPDF()">Baixar PDF</ion-button>
+    </div>
+    
+
+    <div class="pacientes" lines="none" *ngIf="selectedOption === 'Paciente'">
+    
+        <ion-select label="Nome:" lines="none" labelPlacement="floating" interface="popover" [(ngModel)]="selectedPaciente">
+          <ion-select-option *ngFor="let pacientes of pacientes" [value]="pacientes">{{ pacientes.Nome }}</ion-select-option>
+        </ion-select>
+
+        <ion-button class="custom-login-button" expand="block" fill="clear" type="submit" (click)="gerarGraficoPaciente()">Gerar Gráfico</ion-button>
+        <ion-button class="custom-del-button" fill="clear" type="submit" (click)="apagarGrafico()">Apagar Gráfico</ion-button>
+        <ion-button class="custom-login-button" fill="clear" type="submit" (click)="baixarPDF()">Baixar PDF</ion-button>
+
+    </div>
+
+    <div class="enfermeiros" *ngIf="selectedOption === 'Enfermeiro(a)'">
+        
+      <ion-select label="Nome:" labelPlacement="floating" interface="popover" [(ngModel)]="selectedEnfermeiro">
+        <ion-select-option *ngFor="let enfermeiro of enfermeiros" [value]="enfermeiro">{{ enfermeiro.Nome }}</ion-select-option>
+      </ion-select>
+
+      <ion-button class="custom-login-button" expand="block" fill="clear" type="submit" (click)="gerarGraficoEnfermeiro()">Gerar Gráfico</ion-button>
+      <ion-button class="custom-del-button" fill="clear" type="submit" (click)="apagarGrafico()">Apagar Gráfico</ion-button>
+      <ion-button class="custom-login-button" fill="clear" type="submit" (click)="baixarPDF()">Baixar PDF</ion-button>
+
+    </div>
+
+    <div>
+      <div id="graficoContainer"></div>
+    </div>
+</div>
+  </ion-content>

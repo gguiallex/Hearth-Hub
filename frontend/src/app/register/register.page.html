@@ -1,0 +1,61 @@
+<ion-content [fullscreen]="true">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+
+  <ion-content>
+
+    <p class="titulo">Register</p>
+    <div class="tudo">
+
+    <ion-input label="Nome" type="name" label-placement="floating" [(ngModel)]="nome"></ion-input>
+
+    <ion-select label="Tipo de usuário" label-placement="floating" placeholder="Escolha o tipo de usuário..." [(ngModel)]="selectedOption" (ionChange)="selectOption($event)">
+      <ion-select-option value="Administrador">Administrador(a)</ion-select-option>
+      <ion-select-option value="Enfermeiro(a)">Enfermeiro(a)</ion-select-option>
+      <ion-select-option value="Médico">Médico(a)</ion-select-option>
+      <ion-select-option value="Paciente">Paciente</ion-select-option>
+    </ion-select>
+    
+    
+
+      <div *ngIf="selectedOption === 'Médico'">
+        
+        <ion-input label="CRM" type="number" label-placement="floating" [(ngModel)]="crm"></ion-input>
+        <ion-select label="Especialidade" label-placement="floating" placeholder="Escolha a sua especialidade..." [(ngModel)]="selectedEsp">
+          <ion-select-option *ngFor="let especialidade of especialidades" [value]="especialidade.Especialidade">{{ especialidade.Especialidade }}</ion-select-option>
+        </ion-select>
+
+        
+      </div>
+
+      <div *ngIf="selectedOption === 'Enfermeiro(a)'">
+        <ion-input label="COREN" type="number" label-placement="floating" [(ngModel)]="coren"></ion-input>
+      </div>
+
+      <div *ngIf="selectedOption === 'Paciente' || selectedOption === 'Administrador'">
+        <ion-input label="CPF" type="tel" label-placement="floating" [(ngModel)]="cpf" (ionChange)="formatarCPF()" maxlength="11"></ion-input>
+      </div>
+
+      <ion-input label="Email" type="email" label-placement="floating" [(ngModel)]="email"></ion-input>
+      <ion-input label="Senha" type="password" label-placement="floating" [(ngModel)]="senha"></ion-input>
+      <ion-input label="Confirmar Senha" type="password" label-placement="floating" [(ngModel)]="confSenha"></ion-input>
+
+      <div class="botoes">
+        <ion-button class="custom-reg-button" fill="clear" expand="block" type="submit" (click)="register()">Registrar-se</ion-button>
+        <ion-button class="custom-cancel-button" slot="end" fill="clear" routerLink="/home">Cancelar</ion-button>
+      </div>
+
+      <p class="final">Você já possui um perfil? <a href="/login">Entre agora</a></p>
+    </div>
+  </ion-content>
+
+</ion-content>
+
+
+
+
+
+
+
+
+
+

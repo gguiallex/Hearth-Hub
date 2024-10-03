@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/paciente"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Exames Marcados</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+ 
+  <!--<ion-list>
+    <ion-item *ngFor="let exame of exames">
+      <p>Exame Nome: {{exame.NomeExame}}</p>
+    </ion-item>
+  </ion-list>-->
+
+  <ion-list>
+    <ion-list-header (click)="toggleExamesPendentes()">
+      <h1>Exames Pendentes</h1>
+      <ion-icon [name]="mostrarExamesPendentes ? 'chevron-up' : 'chevron-down'"></ion-icon>
+    </ion-list-header>
+    <div *ngIf="mostrarExamesPendentes">
+      <div *ngIf="pendentes.length === 0">
+        <p class="nenhum">Não há nenhum exame pendente.</p>
+      </div>
+    <ion-item *ngFor="let exame of pendentes">
+      <ion-label *ngIf="!exame.DataRealizacao">
+        <h2>Exame a ser Realizado: {{exame.NomeExame}} </h2>
+        <h3>Data da Prescrição: {{ exame.DataPrescricao.split('T')[0] }}</h3>
+        <p>Médico: {{ exame.NomeMedico}}</p>
+        <!--<p *ngIf="exame.DescExame">Descrição: {{ exame.DescExame }}</p>-->
+      </ion-label>
+    </ion-item>
+  </div>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header (click)="toggleExamesRealizados()">
+      <h1>Exames Realizados</h1>
+      <ion-icon [name]="mostrarExamesRealizados ? 'chevron-up' : 'chevron-down'"></ion-icon>
+    </ion-list-header>
+    <div *ngIf="mostrarExamesRealizados" >
+      <div *ngIf="realizados.length === 0">
+        <p class="nenhum">Não há nenhuma exame realizado.</p>
+      </div>
+    <ion-item *ngFor="let exame of realizados">
+      <ion-label *ngIf="exame.DataRealizacao">
+        <h2>Exame: {{exame.NomeExame}} </h2>
+        <h3 *ngIf="exame.DataRealizacao"> Data da Realização: {{ exame.DataRealizacao.split('T')[0] }}</h3>
+        <p>Médico: {{ exame.NomeMedico }}</p>
+        <p>Enfermeiro: {{ exame.NomeEnfermeiro }}</p>
+        <p>Data da Prescrição: {{ exame.DataPrescricao.split('T')[0] }}</p>        <!--<p *ngIf="exame.DescExame">Descrição: {{ exame.DescExame }}</p>-->
+      </ion-label>
+    </ion-item>
+  </div>
+  </ion-list>
+
+</ion-content>

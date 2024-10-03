@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Marcar Exames</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-alert #limparAlert class="custom-alert" header="Você tem certeza que deseja limpar todos os exames selecionados?" [buttons]="deleteButtons"></ion-alert>
+
+  <!--<div *ngIf="pacientes.length > 0" lines="none">
+    <ion-label>Selecione o paciente cujo você deseja marcar os exames:</ion-label>
+    <ion-select placeholder="paciente..." interface="popover" [(ngModel)]="selectedPacienteCPF">
+      <ion-select-option *ngFor="let paciente of pacientes" [value]="paciente.CPF">{{ paciente.Nome }}</ion-select-option>
+    </ion-select>  
+  </div>-->
+
+  <div class="nomePaciente">
+    <ion-label>Paciente:</ion-label><br>
+    <ion-label>{{ pacienteNome }}</ion-label>
+  </div>
+
+  <div class="lista">
+      <ion-label>Exames para serem marcados</ion-label>
+      <ion-searchbar class="sticky-top" placeholder="Ex: Ultrassonografia" [debounce]="1000" (ionInput)="handleInput($event)"></ion-searchbar>
+      <ion-list class="exame-list">
+        <div class="Exames" *ngFor="let exame of filteredExames" class="listaLista">
+          <ion-item>
+            <ion-checkbox slot="end" [(ngModel)]="exame.selected"></ion-checkbox>
+            {{ exame.Nome }}
+          </ion-item>
+        </div>
+    </ion-list>
+    <ion-button expand="block" class="sticky-bottom" (click)="showLimparAlert()">Limpar</ion-button>
+  </div>
+
+  <div *ngIf="selectedPacienteCPF" class="botoes">
+    <ion-button class="custom-reg-button" fill="clear" (click)="confirmar()">Confirmar</ion-button>
+    <ion-button class="custom-cancel-button" fill="clear" (click)="cancelar()">Cancelar</ion-button>
+  </div>
+
+</ion-content>

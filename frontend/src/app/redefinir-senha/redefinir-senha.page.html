@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+
+<ion-content [fullscreen]="true">
+
+  <p class="titulo">Redefinição Senha</p>
+
+  <div class="content-wrapper">
+    <div class="form-wrapper">
+
+      <ion-input [(ngModel)]="novaSenha" label="Nova Senha" label-placement="floating" id="senha" type="password" placeholder="Digite sua nova senha..."></ion-input>
+
+      <ion-button fill="clear" expand="block" class="custom-login-button" type="submit" (click)="redefinirSenha()">Redefinir Senha</ion-button>
+      <ion-button fill="clear" expand="block" class="custom-login-button" type="submit" routerLink="/login">Voltar</ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,81 @@
+*{
+  font-family: 'Montserrat Alternates', sans-serif;
+}
+
+ion-content {
+    --background: linear-gradient(45deg, #7b77a9, #2eb4cc);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    //height: 100vh;
+  }
+
+
+  ion-title{
+    font-size: 25px;
+    color: #333;
+    font-weight: bolder;
+  }
+  
+.button-wrapper {
+    display: flex;
+    justify-content: space-around; /* Espaçamento uniforme entre os botões */
+    margin-top: 8px; /* Espaçamento acima dos botões */
+    }
+
+.tudo{
+    background-color:rgb(212, 212, 212);
+    border-radius: 25px;
+    margin-left: 7%;
+    margin-right: 7%;
+    //margin-top: 10px;
+    }
+
+.titulo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 45%;
+    text-align: center;
+}
+    
+.info{
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    flex-direction: column;
+    margin-left: 10%;
+}
+
+ion-label{
+    font-size: 20px;
+    color: #333;
+    }
+  
+.custom-ok-button, .custom-cancel-button {
+    font-size: 16px;
+    border-radius: 30px; /* Valor alto para criar bordas circulares */
+    transition: background-color 0.3s ease;
+  }
+  
+.custom-ok-button {
+    background-color: #2ec1cc; /* Cor do botão de login */
+    color: #ffffff; /* Cor do texto do botão de login */
+    border: 3px;
+  }
+  
+.custom-ok-button:hover {
+    background-color: #2397ab;
+  }
+  
+.custom-cancel-button {
+    background-color: #ffffff; /* Cor de fundo do botão de registro */
+    color: #2eb4cc; /* Cor do texto do botão de registro */
+    border: 2px solid #2eb4cc; /* Cor da borda do botão de registro */
+  }
+  
+.custom-cancel-button:hover {
+    background-color: #2eaccc;
+    color: #ffffff;
+  }
+  

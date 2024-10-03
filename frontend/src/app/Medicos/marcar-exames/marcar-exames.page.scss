@@ -1,0 +1,118 @@
+* {
+    font-family: 'Montserrat Alternates', sans-serif;
+}
+
+ion-content {
+    --background: rgb(212, 212, 212);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+ion-toolbar {
+    --background: linear-gradient(45deg, #7b77a9, #2eb4cc);
+    --color: #fff;
+
+    --min-height: 30px;
+    --padding-top: 5px;
+    --padding-bottom: 5px;
+}
+
+ion-label, ion-select, ion-select-option{
+    font-size: 20px;
+    margin: 10px;
+    color: black;
+  }
+
+ion-searchbar {
+    --background: #ebebeb;
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Sombra da input */
+    border-radius: 10px;
+    /* Arredondamento da input */
+}
+
+ion-toolbar{
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    text-align: center;
+    height: 60px;
+}
+
+.nomePaciente{
+    margin-top: 20px;
+    text-align: center;
+    ion-label{
+        font-size: 30px;
+    }
+}
+
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.lista {
+    ion-label{
+        text-align: center;
+    }
+    position: relative;
+    min-height: 70%;
+    max-height: 70%;
+    overflow-y: auto;
+    border-style: solid;
+    border-radius: 10px;
+    border-color: #333;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.exame-list {
+    flex: 1;
+    overflow-y: auto;
+    background: rgb(212, 212, 212);
+    padding-top: 10px;
+}
+
+.exame-list ion-item {
+    color: black;
+    --background: rgb(212, 212, 212);
+}
+
+.sticky-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    width: 99%;
+    margin-top: 10px;
+    border-radius: 30px;
+    --background: #2eb4cc;
+    color: #000000;
+}
+
+.botoes {
+    display: flex;
+    justify-content: space-evenly; /* Espaço igual entre os botões */
+    width: 100%; /* Largura total */
+  }
+  
+  .custom-reg-button,
+  .custom-cancel-button {
+    font-size: 16px;
+    border-radius: 30px; /* Valor alto para criar bordas circulares */
+    background-color: #2eb4cc; /* Cor do botão de login */
+    color: #000000; /* Cor do texto do botão de login */
+    border: 3px solid transparent;
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-reg-button:hover,
+  .custom-cancel-button:hover {
+    border-radius: 30px;
+    background-color: #2397ab;
+  }

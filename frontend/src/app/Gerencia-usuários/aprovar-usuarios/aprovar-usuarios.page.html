@@ -1,0 +1,123 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="/home-adm"></ion-back-button>
+    </ion-buttons>
+    <ion-title>APROVAÇÃO</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-alert #apagarAlert class="custom-alert" header="Você tem certeza que deseja apagar este usuário?" [buttons]="deleteButtons"></ion-alert>
+
+  <ion-alert #aprovarAlert class="custom-alert" header="Você tem certeza que deseja aprovar este usuário?" [buttons]="aprovarButtons"></ion-alert>
+
+  <h1 *ngIf="enfermeiros.length > 0" >Novos Enfermeiros</h1>
+  <div class="enfermeiros" *ngFor="let enfermeiro of enfermeiros">
+    <ion-item button>
+      <ion-label button (click)="showEnfermeiroDetails(enfermeiro)" class="nome">{{ enfermeiro.Nome }}</ion-label>
+      <ion-button fill="clear" class="aceitar" data-tipo="enfermeiro" (click)="aprovarUsuario(enfermeiro, 'enfermeiro')"><ion-icon name="checkmark-outline"></ion-icon></ion-button>
+      <ion-button fill="clear" class="apagar" data-tipo="enfermeiro" (click)="apagarUsuario(enfermeiro, 'enfermeiro')"><ion-icon name="close-outline"></ion-icon></ion-button>
+    </ion-item>
+  </div>
+
+
+  <h1 *ngIf="medicos.length > 0">Novos Médicos</h1>
+  <div class="medicos" *ngFor="let medico of medicos">
+    <ion-item button>
+      <ion-label button (click)="showMedicoDetails(medico)" class="nome">{{ medico.Nome }}</ion-label>
+      <ion-button fill="clear" class="aceitar" data-tipo="medico" (click)="aprovarUsuario(medico, 'medico')"><ion-icon name="checkmark-outline"></ion-icon></ion-button>
+      <ion-button fill="clear" class="apagar" data-tipo="medico" (click)="apagarUsuario(medico, 'medico')"><ion-icon name="close-outline"></ion-icon></ion-button>
+    </ion-item>
+  </div>
+
+  <h1 *ngIf="administradores.length > 0">Novos Administradores</h1>
+  <div class="administradores" *ngFor="let administrador of administradores">
+    <ion-item button>
+      <ion-label button (click)="showADMDetails(administrador)" class="nome">{{ administrador.Nome }}</ion-label>
+      <ion-button fill="clear" class="aceitar" data-tipo="admin" (click)="aprovarUsuario(administrador, 'admin')"><ion-icon name="checkmark-outline"></ion-icon></ion-button>
+      <ion-button fill="clear" class="apagar" data-tipo="admin" (click)="apagarUsuario(administrador, 'admin')"><ion-icon name="close-outline"></ion-icon></ion-button>
+    </ion-item>
+  </div>
+
+  <h1 *ngIf="administradores.length == 0 && medicos.length == 0 && enfermeiros.length == 0" >
+    Não há nenhum novo usuário para aprovar
+  </h1>
+
+  <ion-modal #detailModal>
+    <ng-template>
+      <ion-content>
+        <ion-toolbar>
+          <ion-title>Detalhes do Usuário</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="detailModal.dismiss()">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+
+        <div *ngIf="selectedEnfermeiro">
+          <div class="detail-item">
+            <h2>Enfermeiro(a): </h2>
+            <p>{{selectedEnfermeiro}}</p>
+          </div>
+          <div class="detail-item">
+            <h2>COREN: </h2>
+            <p>{{selectedCOREN}}</p>
+          </div>
+          <div class="detail-item">
+            <h2>Email: </h2>
+            <p>{{selectedEmail}}</p>
+          </div>
+          <div class="detail-item">
+            <h2>Situação: </h2>
+            <p>{{selectedSituacao}}</p>
+          </div>
+      </div>
+
+      <div *ngIf="selectedMedico" >
+        <div class="detail-item">
+          <h2>Médico(a): </h2>
+          <p>{{selectedMedico}}</p>
+        </div>
+        <div class="detail-item">
+          <h2>CRM: </h2>
+          <p>{{selectedCRM}}</p>
+        </div>
+        <div class="detail-item">
+          <h2>Especialidade: </h2>
+          <p>{{selectedEsp}}</p>
+        </div>
+        <div class="detail-item">
+          <h2>Email: </h2>
+          <p>{{selectedEmail}}</p>
+        </div>
+        <div class="detail-item">
+          <h2>Situação: </h2>
+          <p>{{selectedSituacao}}</p>
+        </div>
+    </div>
+
+    <div *ngIf="selectedAdmin">
+      <div class="detail-item">
+        <h2>administrador(a): </h2>
+        <p>{{selectedAdmin}}</p>
+      </div>
+      <div class="detail-item">
+        <h2>CPF: </h2>
+        <p>{{selectedCPF}}</p>
+      </div>
+      <div class="detail-item">
+        <h2>Email: </h2>
+        <p>{{selectedEmail}}</p>
+      </div>
+      <div class="detail-item">
+        <h2>Situação: </h2>
+        <p>{{selectedSituacao}}</p>
+      </div>
+  </div>
+
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+</ion-content>

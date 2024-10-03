@@ -1,0 +1,94 @@
+*{
+  font-family: 'Montserrat Alternates', sans-serif; /* Tipo de fonte */
+}
+
+.titulo{
+  font-size: 36px; /* Tamanho da fonte */
+  font-weight: bold;
+  color: #333; /* Cor do texto */
+  line-height: 0;
+  //margin: -15px auto 55px;
+  text-align: center;
+}
+
+.content-wrapper {
+  border: 2px solid #333333; /* Cor da borda */
+  border-radius: 7px; /* Arredondamento da borda */
+  padding: 20px; /* Espaçamento interno */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */ /* Cor de fundo */
+  max-width: 400px; /* Largura máxima */
+  margin: 0px auto; /* Centralizar na tela e afastar do topo */
+  background: rgb(225, 225, 225);
+  margin-top: -30px;
+}
+
+ion-content {
+  --background: linear-gradient(45deg, #7b77a9, #2eb4cc); /* Gradiente de cores *//* Gradiente de cores para o background */
+}
+
+ion-img {
+  height: 250px;
+  width: 250px;
+  margin-left: 15%;
+}
+
+.content-wrapper ion-img {
+  display: block;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra da imagem */
+}
+
+.rounded-image {
+  border-radius: 100%; /* Define o arredondamento da imagem */
+}
+
+.content-wrapper p {
+  font-family: 'Montserrat Alternates', sans-serif; /* Tipo de fonte */
+  font-size: 18px; /* Tamanho da fonte */
+  color: #000000; /* Cor do texto */
+  line-height: 1.5; /* Espaçamento entre linhas */
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: space-between; /* Espaçamento uniforme entre os botões */
+  margin-left: 0%;
+  margin-right: 0%;
+  //margin: 0px auto 0; /* Espaçamento acima dos botões */
+  
+}
+
+.custom-login-button,
+.custom-signup-button {
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-size: 16px;
+  border-radius: 30px; /* Valor alto para criar bordas circulares */
+  transition: background-color 0.3s ease;
+}
+
+.custom-login-button {
+  background-color: #2ec1cc; /* Cor do botão de login */
+  color: #ffffff; /* Cor do texto do botão de login */
+  border: 3px solid transparent;
+
+}
+
+.custom-login-button:hover {
+  background-color: #2397ab;
+}
+
+.custom-signup-button {
+  background-color: #ffffff; /* Cor de fundo do botão de registro */
+  color: #2eb4cc; /* Cor do texto do botão de registro */
+  border: 2px solid #2eb4cc; /* Cor da borda do botão de registro */
+
+}
+
+.custom-signup-button:hover {
+  background-color: #2eaccc;
+  color: #ffffff;
+}
+
+ion-title {
+  text-align: center; /* Centralizar o título */
+  color: #000000; /* Cor do título */
+}

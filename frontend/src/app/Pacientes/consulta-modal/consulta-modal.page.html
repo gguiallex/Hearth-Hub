@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+<ion-content>
+  <div class="titulo">
+    <ion-title>DETALHES DA CONSULTA</ion-title>
+  </div>
+  <div class="tudo">
+
+    <div class="info">
+
+      <br><br>
+      
+      <ion-label>Paciente: {{ consulta.nomePaciente }}</ion-label> <br>
+
+      <ion-label>Médico: {{ consulta.nomeMedico }}</ion-label> <br>
+
+      <ion-label>Especialidade: {{ consulta.especialidade }}</ion-label> <br>
+
+      <ion-label>Dia: {{ consulta.dia }}</ion-label> <br>
+
+      <ion-label>Horário: {{ consulta.horario }}</ion-label> <br><br>
+
+    </div>
+  </div>
+
+  <div class="button-wrapper">
+      <ion-button class="custom-ok-button" fill="clear" (click)="confirmarConsulta()">Confirmar</ion-button>
+      <ion-button class="custom-cancel-button" fill="clear" (click)="fecharModal()">Cancelar</ion-button>
+  </div>
+
+</ion-content>

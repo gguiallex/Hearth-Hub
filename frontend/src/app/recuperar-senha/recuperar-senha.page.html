@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+
+<ion-content [fullscreen]="true">
+
+  <p class="titulo">Recuperar Senha</p>
+
+  <div class="content-wrapper">
+    <div class="form-wrapper">
+
+      <ion-select label="Tipo de usuário" label-placement="floating" placeholder="Escolha o tipo de usuário..." [(ngModel)]="selectedOption" (ionChange)="selectOption($event)">
+        <ion-select-option value="A">Administrador(a)</ion-select-option>
+        <ion-select-option value="E">Enfermeiro(a)</ion-select-option>
+        <ion-select-option value="M">Médico(a)</ion-select-option>
+        <ion-select-option value="P">Paciente</ion-select-option>
+      </ion-select>
+
+      <ion-input [(ngModel)]="email" label="Email" label-placement="floating" id="email" type="email" placeholder="Digite seu email..."></ion-input>
+
+      <ion-button class="custom-login-button" fill="clear" expand="block" (click)="solicitarRecuperacao()" type="submit">
+        Enviar
+        <ion-icon name="mail"></ion-icon>
+      </ion-button>
+
+      <p class="fim">Você não tem um perfil? <a href="/register">Crie o seu perfil aqui</a></p>
+      <p class="fim">Lembrou a senha? <a href="/login">Entre agora</a></p>
+
+
+    </div>
+  </div>
+</ion-content>

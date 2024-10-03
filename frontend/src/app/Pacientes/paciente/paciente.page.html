@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false" (click)="toggleMenu()"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="titulo">Hearth Hub</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-menu contentId="main-content" type="overlay">
+  <ion-content>
+    <ion-list-header class="titulo-menu">Menu</ion-list-header>
+      <ion-item (click)="navigateToMarcarConsulta()" class="opcoes" lines="full">
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        <ion-label>Marcar Consultas</ion-label>
+      </ion-item>
+      <ion-item (click)="navigateToExamesMarcados()" class="opcoes" lines="full">
+        <ion-icon name="clipboard-outline" slot="start"></ion-icon>
+        <ion-label>Consultar Exames</ion-label>
+      </ion-item>
+
+  </ion-content>
+
+  <ion-footer>
+    <ion-item (click)="logout()" class="opcoes">
+      <ion-icon aria-hidden="true" name="log-out" slot="start"></ion-icon>
+      <ion-label >Sair</ion-label>
+      </ion-item>
+</ion-footer>
+</ion-menu>
+
+<ion-content [fullscreen]="true" id="main-content">
+  <div>
+    <h1>Olá, {{userName}}!</h1>
+    <ion-img src="../../../assets/images/pngwing.com (8).png"></ion-img>
+    <h2>Bem vindo(a) ao nosso aplicativo de gestão hospitalar, em que podemos ajudar?</h2>
+  </div>
+
+  <ion-card *ngIf="consultaMaisRecente">
+    <ion-card-header>
+      <ion-card-title>Sua Próxima Consulta</ion-card-title>
+      <ion-card-subtitle> {{ consultaMaisRecente.medico?.Especialidade }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+
+      <p><strong>Médico:</strong> {{ consultaMaisRecente.medico?.Nome }} </p>
+      <p><strong>Data:</strong> {{consultaMaisRecente.data.split('T')[0]}}</p>
+      <p><strong>Hora:</strong> {{consultaMaisRecente.Horario}}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!consultaMaisRecente">
+    <ion-card-header>
+      <ion-card-title>Próxima Consulta</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Não há consultas futuras agendadas.</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

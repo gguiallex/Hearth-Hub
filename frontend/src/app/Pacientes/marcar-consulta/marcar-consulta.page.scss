@@ -1,0 +1,91 @@
+*{
+  font-family: 'Montserrat Alternates', sans-serif;
+}
+
+ion-content {
+  --background: rgb(212, 212, 212);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: space-between; /* Espaçamento uniforme entre os botões */
+    margin-top: 0px; /* Espaçamento acima dos botões */
+  }
+
+  ion-toolbar {
+    --background: linear-gradient(45deg, #7b77a9, #2eb4cc);
+    --color: #fff;
+  
+    --min-height: 30px;
+    --padding-top: 5px;
+    --padding-bottom: 5px;
+  }
+  
+  .medicos, .especialidade, .horario, ion-select, ion-select-option{
+    font-family: 'Montserrat Alternates', sans-serif;
+    color: #333; /* Cor do texto */
+  }
+
+  /*.calendar-container{
+    font-family: 'Montserrat Alternates', sans-serif;
+    color: #333;
+    font-size: 15px;
+  }*/
+
+  .calendario{
+    font-family: 'Montserrat Alternates', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2eb4cc;
+    font-size: 15px;
+  }
+
+  ion-datetime {
+    background: #fff;//linear-gradient(45deg, #7b77a9, #2eb4cc);
+    margin-top: 8px;
+    border-radius: 16px;
+    color: #000000;
+    --wheel-highlight-border-radius: black;
+  }
+
+.custom-ok-button,
+.custom-cancel-button {
+  font-family: 'Montserrat Alternates', sans-serif;;
+  font-size: 16px;
+  border-radius: 30px; /* Valor alto para criar bordas circulares */
+  transition: background-color 0.3s ease;
+}
+
+.custom-ok-button {
+  background-color: #2ec1cc; /* Cor do botão de login */
+  color: #ffffff; /* Cor do texto do botão de login */
+  border: 3px;
+  font-family: 'Montserrat Alternates', sans-serif;
+}
+
+.custom-ok-button:hover {
+  background-color: #2397ab;
+}
+
+.custom-cancel-button {
+  background-color: #ffffff; /* Cor de fundo do botão de registro */
+  color: #2eb4cc; /* Cor do texto do botão de registro */
+  border: 2px solid #2eb4cc; /* Cor da borda do botão de registro */
+}
+
+.divHor{
+  //display: flex;
+  //justify-content: center;
+  //align-items: center;
+  margin-top: 10px;
+}
+
+.custom-cancel-button:hover {
+  background-color: #2eaccc;
+  color: #ffffff;
+}

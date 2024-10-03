@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="true" (click)="toggleMenu()"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Hearth Hub</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-menu contentId="main-content" type="overlay">
+  <ion-content>
+    <ion-list-header class="titulo-menu">MENU</ion-list-header>
+      <ion-item (click)="navigateToExamesPendentes()" class="opcoes" lines="full">
+        <ion-icon name="water-outline" slot="start"></ion-icon>
+        <ion-label>Exames a Realizar</ion-label>
+      </ion-item>
+
+  </ion-content>
+
+  <ion-footer>
+    <ion-item (click)="logout()" class="opcoes">
+      <ion-icon aria-hidden="true" name="log-out" slot="start"></ion-icon>
+      <ion-label >Sair</ion-label>
+      </ion-item>
+</ion-footer>
+</ion-menu>
+
+<ion-content Id="main-content" [fullscreen]="true">
+
+  <h1 class="boasVindas">Olá, {{userName}}, Seja bem-vindo(a) ao nosso sistema Hearth Hub</h1>
+
+  <ion-img src="../../../assets/images/enfermeira.png"></ion-img>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Total de Exames para serem realizados:</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-label><ion-badge color="danger">{{ examesPendentes }}</ion-badge> Exames</ion-label>
+    </ion-card-content>
+    <ion-button fill="clear" expand="block" (click)="navigateToExamesPendentes()">Ver Exames</ion-button>
+  </ion-card>
+
+</ion-content>

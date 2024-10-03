@@ -1,0 +1,22 @@
+<ion-content [fullscreen]="true">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
+
+
+  <p class="titulo">Login</p>
+
+  <div class="content-wrapper">
+    <div class="form-wrapper">
+      <ion-input [(ngModel)]="email" label="Email" label-placement="floating" id="email" placeholder="Digite seu email..."></ion-input>
+      <ion-input [(ngModel)]="senha" label="Senha" label-placement="floating" id="senha" type="password" placeholder="Digite sua senha..."></ion-input>
+      <ion-button class="custom-login-button" fill="clear" expand="block" (click)="login()" type="submit">
+        Logar
+        <ion-icon name="log-in"></ion-icon>
+      </ion-button>
+      <p class="fim">Você não tem um perfil? <a href="/register">Crie o seu perfil aqui</a></p>
+      <p class="fim"><a href="/recuperar-senha">Esqueceu a senha?</a></p>
+      
+      <p class="cancelar"><a href="/home"> Cancelar login </a></p>
+    </div>
+  </div>
+</ion-content>
+
