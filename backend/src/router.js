@@ -10,6 +10,10 @@ const usersMiddlewares = require('./middlewares/usersMiddlewares');
 const authController = require('./controllers/AuthController');
 
 
+router.get("/", (req, res) => {
+    return res.json("hello world");
+});
+
 router.get('/medicos', UsersController.getAllMedicos);
 router.post('/medicos', usersMiddlewares.validateBodyMedicos, UsersController.createMedico);
 router.put('/medico/:CRM', usersMiddlewares.validateBodyMedicos, UsersController.updateMedico);
