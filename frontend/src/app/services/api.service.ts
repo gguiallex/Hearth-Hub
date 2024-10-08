@@ -8,7 +8,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:2222';
+  private apiUrl = 'https://hearth-hub.vercel.app';
   private consultaAtualizada = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) { }
