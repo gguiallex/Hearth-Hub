@@ -8,7 +8,7 @@ import { ApiService } from './api.service';
   providedIn: 'root'
 })
 export class AuthService {
- private apiUrl = 'http://localhost:2222';
+ private apiUrl = 'https://hearth-hub.vercel.app';
  private examesPendentes = new BehaviorSubject<number | null>(null);
 
   constructor(private http: HttpClient, private apiService: ApiService) { }

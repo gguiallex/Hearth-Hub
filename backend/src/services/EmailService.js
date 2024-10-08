@@ -19,7 +19,7 @@ const enviarEmailRecuperacaoSenha = async (destinatario, token) => {
             html: `                <h1>Olá!</h1>
                 <p>Recebemos uma solicitação para redefinir a senha da sua conta no HealthHub.</p>
                 <p>Se você solicitou essa alteração, clique no link abaixo para redefinir sua senha:</p>
-                <p><a href="http://localhost:8100/redefinir-senha?token=${token}&email=${destinatario}" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">REDEFINIR SENHA</a></p>
+                <p><a href="http://hearth-hub-frontend.vercel.app/redefinir-senha?token=${token}&email=${destinatario}" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">REDEFINIR SENHA</a></p>
                 <p>Se você não solicitou essa alteração, ignore este email. Sua conta está segura.</p>
                 <p>Atenciosamente,<br>Equipe HealthHub</p>` 
         });
@@ -38,7 +38,7 @@ const enviarEmailConfirmaçãoDeConta = async (destinatario, token) => {
             html:`<h1>Olá!</h1>
                 <p>Bem-vindo ao HealthHub!</p>
                 <p>Para confirmar o seu cadastro, clique no link abaixo:</p>
-                <p><a href="http://localhost:8100/login?token=${token}&email=${destinatario}" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">CONFIRMAR CONTA</a></p>
+                <p><a href="http://hearth-hub-frontend.vercel.app/login?token=${token}&email=${destinatario}" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">CONFIRMAR CONTA</a></p>
                 <p>Se você não se cadastrou no HealthHub, ignore este email.</p>
                 <p>Obrigado!</p>`
         });
@@ -57,7 +57,7 @@ const enviarEmailAprovaçãoConfirmada = async (destinatario) => {
             html:       `<h1>Olá!</h1>
                 <p>Bem-vindo ao HealthHub!</p>
                 <p>Temos o prazer de informar que suas informações foram verificadas e você foi aprovado no nosso aplicativo!</p>
-                <p><a href="http://localhost:8100/login" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">FAÇA SEU LOGIN AGORA</a></p>
+                <p><a href="http://hearth-hub-frontend.vercel.app/login" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">FAÇA SEU LOGIN AGORA</a></p>
                 <p>Obrigado por se juntar a nós!</p>
                 <p>Atenciosamente,</p>
                 <p>A equipe do HealthHub</p>`
@@ -76,7 +76,7 @@ const enviarEmailPessoasPendentes = async (destinatario) => {
             subject: 'Você tem novos usuários para verificar!',
             html:       `<h1>Caro Administrador(a),</h1>
                 <p>Temos novos usuários aguardando verificação em nosso sistema. Por favor, revise e registre os novos usuários o mais breve possível.</p>
-                <p><a href="http://localhost:8100/login" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">Clique aqui para fazer o login</a></p>
+                <p><a href="http://hearth-hub-frontend.vercel.app/login" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">Clique aqui para fazer o login</a></p>
                 <p>Obrigado por sua atenção!</p>
                 <p>Atenciosamente,</p>
                 <p>A equipe do HealthHub</p>`
@@ -95,7 +95,7 @@ const enviarEmailAvisoAprovação = async (destinatario, nome) => {
             subject: 'Parabéns pela sua aprovação!',
             html:        `<h1>Caro(a) ${nome},</h1>
             <p>Temos o prazer de informar que sua conta foi aprovada e você agora pode acessar o nosso aplicativo!</p>
-            <p><a href="http://localhost:8100/login" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">FAÇA SEU LOGIN AGORA</a></p>
+            <p><a href="http://hearth-hub-frontend.vercel.app/login" style="background-color: #4CAF50; color: white; padding: 12px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px;">FAÇA SEU LOGIN AGORA</a></p>
             <p>Obrigado por se juntar a nós!</p>
             <p>Atenciosamente,</p>
             <p>A equipe do HealthHub</p>`
