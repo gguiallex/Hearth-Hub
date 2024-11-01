@@ -1,0 +1,8 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "Hearth Hub",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
