@@ -60,7 +60,9 @@ export class LoginPage implements OnInit {
           switch (response.perfil) {
             case 'P':
               if(response.situação == 'Validado'){
-              this.router.navigate(['/paciente']);
+              this.router.navigate(['/paciente']).then(() => {
+                location.reload();
+              });
             }else if(response.situação == 'Bloqueado') {
               this.alertService.showAlert('Erro ao fazer login: Sua conta esta bloqueada! Entre em contato com algum supervisor para saber mais');
             }else{
