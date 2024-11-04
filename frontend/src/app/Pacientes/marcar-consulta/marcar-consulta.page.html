@@ -50,11 +50,11 @@
   <div class="divHor">
     <div class="horario">
       <ion-label position="stacked">Selecione o horário desejado da consulta:</ion-label>
-        <ion-select aria-label="Selecione o horário desejado" interface="popover" placeholder="Horario..." [(ngModel)]="selectedTime">
-          <ion-select-option *ngFor="let slot of timeSlots" [value]="slot.time" [disabled]="!slot.available">
-            {{ slot.time }}
-          </ion-select-option>
-        </ion-select>
+      <ion-select aria-label="Selecione o horário desejado" interface="popover" placeholder="Horário..." [(ngModel)]="selectedTime">
+        <ion-select-option *ngFor="let slot of timeSlots" [value]="slot.time" [disabled]="!slot.available">
+          {{ slot.time }}
+        </ion-select-option>
+      </ion-select>
     </div>
   </div>
 

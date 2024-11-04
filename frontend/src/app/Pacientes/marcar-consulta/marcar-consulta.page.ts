@@ -91,15 +91,33 @@ export class MarcarConsultaPage implements OnInit {
     this.updateAvailableTimeSlots();
   }
 
+  updateAvailableTimeSlots() {
+    const consultasFiltradas = this.filtrarConsultasPorData(this.selectedDate);
+    console.log("Consultas filtradas para a data selecionada:", consultasFiltradas);
+
+    // Atualiza a disponibilidade dos horários
+    this.timeSlots.forEach(slot => {
+      const horarioConsulta = consultasFiltradas.some(consulta => {
+        const consultaTime = consulta.Horario.substring(0, 5); // HH:MM format
+        return consultaTime === slot.time;
+      });
+      slot.available = !horarioConsulta; // Marque como indisponível se houver uma consulta no horário
+    });
+    console.log("Horários disponíveis após atualização:", this.timeSlots);
+}
+
   //gera os horarios de atendimento
   generateTimeSlots() {
     this.timeSlots = [];
+
+    // Criação dos horários de 30 em 30 minutos
     for (let hour = 8; hour < 18; hour++) {
-      this.timeSlots.push({ time: `${hour}:00`, available: true });
-      this.timeSlots.push({ time: `${hour}:30`, available: true });
+      this.timeSlots.push({ time: `${hour.toString().padStart(2, '0')}:00`, available: true });
+      this.timeSlots.push({ time: `${hour.toString().padStart(2, '0')}:30`, available: true });
     }
-    this.updateAvailableTimeSlots();
-  }
+    
+    this.updateAvailableTimeSlots(); // Atualizar a disponibilidade
+}
 
   carregarEspecialidades() {
     this.apiService.getEspecialidades().subscribe(
@@ -129,19 +147,6 @@ export class MarcarConsultaPage implements OnInit {
       );
     }
   }
-
-  updateAvailableTimeSlots() {
-    const consultasFiltradas = this.filtrarConsultasPorData(this.selectedDate);
-    console.log(consultasFiltradas);
-
-    this.timeSlots.forEach(slot => {
-      slot.available = !consultasFiltradas.some(consulta => {
-        const consultaTime = consulta.Horario.substring(0, 5); // HH:MM format
-        return consultaTime === slot.time;
-      });
-    });
-  }
-
 
   async mostrarAlerta(titulo: string, mensagem: string) {
     const alert = await this.alertController.create({
@@ -225,12 +230,14 @@ export class MarcarConsultaPage implements OnInit {
     this.apiService.getConsultasDoMedico(medicoCRM).subscribe(
       consultas => {
         this.consultas = consultas;
+        console.log("Consultas carregadas para o médico selecionado:", consultas);
+        this.updateAvailableTimeSlots(); // Atualizar imediatamente após carregar as consultas
       },
       error => {
         console.error('Erro ao buscar consultas do médico:', error);
       }
     );
-  }
+}
 
   filtrarConsultasPorData(data: string) {
     const consultasFiltradas = this.consultas.filter(consulta => {

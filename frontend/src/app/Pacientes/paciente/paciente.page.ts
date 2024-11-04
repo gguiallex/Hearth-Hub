@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { ApiService } from 'src/app/services/api.service';
+import { Subscription } from 'rxjs';
 
 interface Consulta {
   CPF: string;
@@ -19,7 +20,9 @@ interface Consulta {
 })
 
 
-export class PacientePage implements OnInit {
+export class PacientePage implements OnInit, OnDestroy {
+  private cpfCheckInterval: any;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private menuController: MenuController,
     private router: Router,
@@ -28,7 +31,7 @@ export class PacientePage implements OnInit {
   ) { }
 
   userName = '';
-  cpf = '';
+  cpf: string | null = null;
   consultas: Consulta[] = [];
   consultasRecentes: Consulta[] = [];
   consultaMaisRecente: Consulta | null = null;
@@ -36,13 +39,33 @@ export class PacientePage implements OnInit {
   ngOnInit() {
     const perfil = this.authService.getProfile();
     const situação = this.authService.getStatus();
+
     if (perfil !== 'P' && situação !== 'Validado') {
       this.router.navigate(['/login']);
     } else {
       this.userName = this.authService.getNome() ?? 'Paciente';
-      this.cpf = this.authService.getCpf() ?? '';
-      this.carregarConsultas();
+      this.waitForCpf(); // Função para aguardar o CPF estar disponível
     }
+  }
+
+  waitForCpf() {
+    this.cpfCheckInterval = setInterval(() => {
+      this.cpf = this.authService.getCpf();
+      if (this.cpf) {
+        clearInterval(this.cpfCheckInterval);  // Para o intervalo assim que o CPF for encontrado
+        this.carregarConsultas(this.cpf);      // Chama carregarConsultas com o CPF
+      } else {
+        console.warn("Aguardando CPF...");
+      }
+    }, 200);  // Verifica a cada 200 ms
+  }
+
+  ngOnDestroy() {
+    // Limpa o intervalo e as assinaturas quando o componente é destruído
+    if (this.cpfCheckInterval) {
+      clearInterval(this.cpfCheckInterval);
+    }
+    this.subscriptions.unsubscribe();
   }
 
   toggleMenu() {
@@ -57,9 +80,8 @@ export class PacientePage implements OnInit {
     this.router.navigate(['/exames-marcados']);
   }
 
-  carregarConsultas() {
-    console.log(this.cpf);
-    this.apiService.getConsultasDoPaciente(this.cpf).subscribe(
+  carregarConsultas(cpf: string) {
+    this.apiService.getConsultasDoPaciente(cpf).subscribe(
       consultas => {
         // Transformar dados para usar 'Horario' ao invés de 'Hora'
         this.consultas = consultas.map(consulta => ({

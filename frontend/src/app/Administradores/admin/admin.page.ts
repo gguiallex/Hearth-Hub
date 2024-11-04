@@ -2,7 +2,7 @@ import { AlertService } from '.././../services/alert.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, ToastController } from '@ionic/angular';
 import { ApiService } from '../../services/api.service';
 import Chart, { LinearScale, CategoryScale, Title } from 'chart.js/auto';
 import jsPDF from 'jspdf';
@@ -47,7 +47,8 @@ export class AdminPage implements OnInit {
     private router: Router,
     public popoverController: PopoverController,
     private apiService: ApiService,
-    private alertService: AlertService) {
+    private alertService: AlertService,
+    private toastController: ToastController) {
     this.chartElement = {} as ElementRef;
   }
 
@@ -61,6 +62,15 @@ export class AdminPage implements OnInit {
 
     this.carregarDados();
     this.setMaxDate();
+  }
+
+  async exibirToast(mensagem: string) {
+    const toast = await this.toastController.create({
+      message: mensagem,
+      duration: 2000, // duração em milissegundos
+      position: 'top' // posição do toast
+    });
+    toast.present();
   }
 
   setMaxDate() {
@@ -504,7 +514,8 @@ export class AdminPage implements OnInit {
 
     if (this.selectedOption === 'Médico') {
       if (!this.dataInicio || !this.dataFim || !this.selectedMedico) {
-        console.warn("Preencha todos os campos para gerar o gráfico.");
+        console.warn("Preencha todos os campos para gerar o PDF.");
+        this.exibirToast('Preencha todos os campos antes de gerar o PDF.');
         return;
       }
 
@@ -546,6 +557,7 @@ export class AdminPage implements OnInit {
             console.error("Contexto 2D do canvas não disponível.");
           }*/
             doc.save('relatorio_Medico.pdf');
+            this.exibirToast('Relatório baixado com sucesso! Verifique sua pasta de Downloads');
         },
         error => {
           console.error('Erro ao carregar consultas:', error);
@@ -554,6 +566,7 @@ export class AdminPage implements OnInit {
     } else if (this.selectedOption === 'Paciente') {
       if (!this.selectedPaciente) {
         console.warn("Escolha um paciente antes de gerar o PDF.");
+        this.exibirToast('Escolha um paciente antes de gerar o PDF.');
         return;
       }
 
@@ -603,6 +616,7 @@ export class AdminPage implements OnInit {
               console.error("Contexto 2D do canvas não disponível.");
             }*/
             doc.save('relatorio_paciente.pdf');
+            this.exibirToast('Relatório baixado com sucesso! Verifique sua pasta de Downloads');
           }).catch(error => {
             console.error('Erro ao buscar especialidades:', error);
           });
@@ -614,6 +628,7 @@ export class AdminPage implements OnInit {
     } else {
       if (!this.selectedEnfermeiro) {
         console.warn("Escolha um enfermeiro antes de gerar o PDF.");
+        this.exibirToast('Escolha um enfermeiro antes de gerar o PDF.');
         return;
       }
 
@@ -635,6 +650,7 @@ export class AdminPage implements OnInit {
 
           // Salva o PDF
           doc.save('relatorio_Enfermeiro.pdf');
+          this.exibirToast('Relatório baixado com sucesso! Verifique sua pasta de Downloads');
         },
         error => {
           console.error('Erro ao carregar exames realizados do enfermeiro:', error);
