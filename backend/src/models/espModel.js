@@ -16,7 +16,7 @@ const getExameByCodigo = async (codigo) => {
 }
 
 const getExamesByEnf = async (COREN) => {
-    const [exame] = await connection.execute('SELECT * FROM examesprescritos WHERE COREN = ?', [COREN]);
+    const [exame] = await connection.execute('SELECT * FROM examesPrescritos WHERE COREN = ?', [COREN]);
     return exame;
 }
 
