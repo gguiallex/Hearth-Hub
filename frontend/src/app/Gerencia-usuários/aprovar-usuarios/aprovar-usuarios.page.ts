@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { SuspensoService } from 'src/app/services/suspenso.service';
 import { IonModal, IonAlert, ToastController } from '@ionic/angular';
 
 
@@ -12,9 +11,11 @@ import { IonModal, IonAlert, ToastController } from '@ionic/angular';
   styleUrls: ['./aprovar-usuarios.page.scss'],
 })
 export class AprovarUsuariosPage implements OnInit {
-  medicos: any[] = [];
-  enfermeiros: any[] = [];
-  administradores: any[] = [];
+  medicos: any[] = []; // Lista de médicos
+  enfermeiros: any[] = []; // Lista de enfermeiros
+  administradores: any[] = []; // Lista de administradores
+
+  // Variáveis para armazenar detalhes do usuário selecionado
   selectedAdmin = "";
   selectedEnfermeiro = "";
   selectedMedico = "";
@@ -25,32 +26,34 @@ export class AprovarUsuariosPage implements OnInit {
   selectedEsp = "";
   selectedEmail = "";
   selectedSenha = "";
-
   selectedUsuario = "";
   tipoUsuario = "";
 
+  // Referências para os modais e alertas
   @ViewChild('detailModal') detailModal!: IonModal;
   @ViewChild('apagarAlert') apagarAlert!: IonAlert;
   @ViewChild('aprovarAlert') aprovarAlert!: IonAlert;
 
   constructor(private apiService: ApiService,
     private authService: AuthService,
-    private suspensoService: SuspensoService,
     private router: Router,
     private toastController: ToastController) { }
 
   ngOnInit() {
     const perfil = this.authService.getProfile();
     const situação = this.authService.getStatus();
+    // Verifica se o usuário tem o perfil e status adequados, caso contrário, redireciona para a página de login
     if (perfil !== 'A' && situação !== 'Validado') {
       this.router.navigate(['/login']);
     }
 
+    // Carrega as listas de médicos, enfermeiros e administradores
     this.carregarMedicos();
     this.carregarEnfermeiros();
     this.carregarAdministradores();
   }
 
+  // Botões para o alerta de exclusão
   public deleteButtons = [
     {
       text: 'Cancelar',
@@ -65,6 +68,7 @@ export class AprovarUsuariosPage implements OnInit {
     },
   ];
 
+  // Botões para o alerta de aprovação
   public aprovarButtons = [
     {
       text: 'Cancelar',
@@ -79,6 +83,7 @@ export class AprovarUsuariosPage implements OnInit {
     },
   ];
 
+  // Função para exibir um toast com uma mensagem específica
   async exibirToast(mensagem: string) {
     const toast = await this.toastController.create({
       message: mensagem,
@@ -88,15 +93,12 @@ export class AprovarUsuariosPage implements OnInit {
     toast.present();
   }
 
+  // Filtra usuários suspensos
   filterSuspendedUsers(users: any[]): any[] {
     return users.filter(user => user.Situação === 'Suspenso');
   }
 
-  /*updateTotalSuspensos() {
-    const totalSuspensos = this.medicos.length + this.enfermeiros.length + this.administradores.length;
-    this.suspensoService.updateSuspensoCount(totalSuspensos);
-  }*/
-
+  // Carrega a lista de médicos suspensos
   carregarMedicos() {
     this.apiService.getMedicos().subscribe(
       medicos => {
@@ -109,6 +111,7 @@ export class AprovarUsuariosPage implements OnInit {
     );
   }
 
+  // Carrega a lista de enfermeiros suspensos
   carregarEnfermeiros() {
     this.apiService.getEnfermeiros().subscribe(
       enfermeiros => {
@@ -121,6 +124,7 @@ export class AprovarUsuariosPage implements OnInit {
     );
   }
 
+  // Carrega a lista de administradores suspensos
   carregarAdministradores() {
     this.apiService.getAdministradores().subscribe(
       administradores => {
@@ -133,6 +137,7 @@ export class AprovarUsuariosPage implements OnInit {
     );
   }
 
+  // Atualiza as informações do enfermeiro selecionado
   atualizarInformaçõesEnfermeiro(enfermeiro: any) {
     this.selectedAdmin = '';
     this.selectedCPF = '';
@@ -147,6 +152,7 @@ export class AprovarUsuariosPage implements OnInit {
     this.selectedSituacao = enfermeiro.Situação;
   }
 
+  // Exibe os detalhes do enfermeiro selecionado em um modal
   showEnfermeiroDetails(enfermeiro: any) {
 
     this.atualizarInformaçõesEnfermeiro(enfermeiro);
@@ -154,6 +160,7 @@ export class AprovarUsuariosPage implements OnInit {
     this.detailModal.present();
   }
 
+  // Atualiza as informações do médico selecionado
   atualizarInformaçõesMedico(medico: any) {
     this.selectedAdmin = '';
     this.selectedCPF = '';
@@ -168,12 +175,14 @@ export class AprovarUsuariosPage implements OnInit {
     this.selectedSituacao = medico.Situação;
   }
 
+  // Exibe os detalhes do médico selecionado em um modal
   showMedicoDetails(medico: any) {
     this.atualizarInformaçõesMedico(medico);
 
     this.detailModal.present();
   }
 
+  // Atualiza as informações do administrador selecionado
   atualizarInformaçõesADM(administrador: any) {
 
     this.selectedMedico = '';
@@ -189,12 +198,14 @@ export class AprovarUsuariosPage implements OnInit {
     this.selectedSituacao = administrador.Situação;
   }
 
+  // Exibe os detalhes do administrador selecionado em um modal
   showADMDetails(administrador: any) {
     this.atualizarInformaçõesADM(administrador);
 
     this.detailModal.present();
   }
 
+  // Prepara a aprovação de um usuário
   aprovarUsuario(usuario: any, tipo: string) {
     this.selectedUsuario = usuario;
     this.tipoUsuario = tipo;
@@ -202,6 +213,7 @@ export class AprovarUsuariosPage implements OnInit {
     this.aprovarAlert.present();
   }
 
+  // Prepara a exclusão de um usuário
   apagarUsuario(usuario: any, tipo: string) {
     this.selectedUsuario = usuario;
     this.tipoUsuario = tipo;
@@ -209,6 +221,7 @@ export class AprovarUsuariosPage implements OnInit {
     this.apagarAlert.present();
   }
 
+  // Confirma a aprovação de um usuário
   confirmarAprovarUsuario() {
     const usuario = this.selectedUsuario;
 
@@ -275,6 +288,7 @@ export class AprovarUsuariosPage implements OnInit {
     }
   }
 
+  // Confirma a exclusão de um usuário
   confirmarApagarUsuario() {
     const usuario = this.selectedUsuario;
 
@@ -316,5 +330,4 @@ export class AprovarUsuariosPage implements OnInit {
       );
     }
   }
-
 }
