@@ -11,20 +11,22 @@ import { IonModal } from '@ionic/angular/common';
   styleUrls: ['./exames.page.scss'],
 })
 export class ExamesPage implements OnInit {
+  // Variáveis de classe para armazenar os dados do exame
   Nome = '';
   exame: { CodExames: string, Nome: string, Desc: string }[] = [];
   filteredExames: { CodExames: string, Nome: string, Desc: string }[] = [];
   selectedNome = '';
   selectedCodigo = '';
-  selectedDesc = ''; 
+  selectedDesc = '';
   Desc = '';
   Descrição = '';
   CodExames = '';
-  editMode: boolean = false;
-  block:boolean = false;
+  editMode: boolean = false; // Referência ao modal de detalhes
+  block: boolean = false;
 
-  @ViewChild('modal') modal!: IonModal;
-  @ViewChild('detailModal') detailModal!: IonModal;
+  @ViewChild('modal') modal!: IonModal; // Referência ao modal de criação
+  @ViewChild('detailModal') detailModal!: IonModal; // Referência ao modal de detalhes
+
   constructor(private router: Router,
     private authService: AuthService,
     private apiService: ApiService,
@@ -38,9 +40,10 @@ export class ExamesPage implements OnInit {
       this.router.navigate(['/login']);
     }
 
-    this.carregarExames();
+    this.carregarExames(); // Carrega a lista de exames ao iniciar a página
   }
 
+  // Carrega exames da API e ordena por nome
   carregarExames() {
     this.apiService.getExames().subscribe(
       exames => {
@@ -54,14 +57,14 @@ export class ExamesPage implements OnInit {
     );
   }
 
+  // Mostra os detalhes de uma especialidade em um modal
   showExamesDetails(exame: any) {
     // Atribuir os valores do exame clicado às variáveis para exibir no modal de detalhes
     this.selectedCodigo = exame.CodExames;
     this.selectedNome = exame.Nome;
     this.selectedDesc = exame.Descrição;
 
-    // Abrir o modal de detalhes
-    this.detailModal.present();
+    this.detailModal.present(); // Abrir o modal de detalhes
   }
 
   handleInput(event: any) {
@@ -71,16 +74,17 @@ export class ExamesPage implements OnInit {
     );
   }
 
+  // Ativa o modo de edição
   editExame() {
-    // Ativa o modo de edição
     this.editMode = true;
   }
 
+  // desativa o modo de edição
   cancelExame() {
-    // desativa o modo de edição
     this.editMode = false;
   }
 
+  // Atualiza um exame existente
   async updateExame() {
     try {
       const response = await this.apiService.atualizarExame(this.selectedCodigo, this.selectedNome, this.selectedDesc).toPromise();
@@ -94,6 +98,7 @@ export class ExamesPage implements OnInit {
     }
   }
 
+  // Exclui um exame
   async deleteExame() {
     try {
       const response = await this.apiService.excluirExame(this.selectedCodigo).toPromise();
@@ -107,7 +112,8 @@ export class ExamesPage implements OnInit {
     }
   }
 
-  async criarExame(){
+  // Cria umo novo exame
+  async criarExame() {
 
     this.Descrição = this.Desc;
 
@@ -141,7 +147,8 @@ export class ExamesPage implements OnInit {
     }
   }
 
-  limparCampo(){
+  // Limpa os campos do exame
+  limparCampo() {
     this.Nome = '';
     this.Desc = '';
     this.Descrição = '';

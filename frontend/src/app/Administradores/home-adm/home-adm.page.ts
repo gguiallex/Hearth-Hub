@@ -11,70 +11,82 @@ import { ApiService } from '../../services/api.service';
   styleUrls: ['./home-adm.page.scss'],
 })
 export class HomeAdmPage implements OnInit {
-  totalSuspensos: number = 0;
-  userName = '';
-  totalExames: number = 0;
-  totalEspecialidades: number = 0;
-  atividadesRecentes: string[] = ['Usuário X suspenso', 'Especialidade Y adicionada'];
+  totalSuspensos: number = 0; // Armazena o número total de usuários suspensos
+  userName = ''; // Armazena o nome do usuário logado
+  totalExames: number = 0; // Armazena o número total de exames
+  totalEspecialidades: number = 0; // Armazena o número total de especialidades
+  //atividadesRecentes: string[] = ['Usuário X suspenso', 'Especialidade Y adicionada']; // Exemplo de atividades recentes
 
-  constructor(private menuController: MenuController, 
+  constructor(private menuController: MenuController,
     private router: Router,
     private authService: AuthService,
     private suspensoService: SuspensoService,
     private apiService: ApiService
-) { }
+  ) { }
 
-toggleMenu() {
-this.menuController.toggle();
-}
+  // Função para alternar o menu
+  toggleMenu() {
+    this.menuController.toggle();
+  }
 
-navigateToInspecionar() {
-this.router.navigate(['/admin']);
-}
+  // Navega para a página de inspeção
+  navigateToInspecionar() {
+    this.router.navigate(['/admin']);
+  }
 
-navigateToGerenciar() {
-  this.router.navigate(['/tabs/gerencia-usuarios']);
-}
+  // Navega para a página de gerenciamento de usuários
+  navigateToGerenciar() {
+    this.router.navigate(['/tabs/gerencia-usuarios']);
+  }
 
-navigateToEspecialidades() {
-  this.router.navigate(['/especialidades']);
-}
+  // Navega para a página de especialidades
+  navigateToEspecialidades() {
+    this.router.navigate(['/especialidades']);
+  }
 
-navigateToExames() {
-  this.router.navigate(['/exames']);
-}
+  // Navega para a página de exames
+  navigateToExames() {
+    this.router.navigate(['/exames']);
+  }
 
-logout() {
-  this.menuController.close().then(() => {
-    this.authService.logout();
-    this.router.navigate(['/login']).then(() => {
-      location.reload();  // Recarregar a página após o logout e redirecionamento
+  // Função de logout
+  logout() {
+    this.menuController.close().then(() => {
+      this.authService.logout();
+      this.router.navigate(['/login']).then(() => {
+        location.reload();  // Recarregar a página após o logout e redirecionamento
+      });
     });
-  });
-}
+  }
 
-ngOnInit() {
-  const situação = this.authService.getStatus();
-const perfil = this.authService.getProfile();
-if (perfil !== 'A' && situação !=='Validado') {
-this.router.navigate(['/login']);
-}
+  ngOnInit() {
+    const situação = this.authService.getStatus();
+    const perfil = this.authService.getProfile();
+    // Verifica se o usuário tem permissão para acessar a página
+    if (perfil !== 'A' && situação !== 'Validado') {
+      this.router.navigate(['/login']);
+    }
 
-this.suspensoService.updateSuspensoCount();
+    // Atualiza o contador de usuários suspensos
+    this.suspensoService.updateSuspensoCount();
 
-this.suspensoService.suspensoCount$.subscribe(count => {
-  this.totalSuspensos = count;
-});
+    // Inscreve-se no contador de usuários suspensos para atualizar a interface
+    this.suspensoService.suspensoCount$.subscribe(count => {
+      this.totalSuspensos = count;
+    });
 
- this.userName = this.authService.getNome() ?? 'administrador(a)';
+    // Obtém o nome do usuário logado
+    this.userName = this.authService.getNome() ?? 'administrador(a)';
 
- this.apiService.countExames().subscribe(count => {
-  this.totalExames = count;
-});
+    // Obtém o número total de exames
+    this.apiService.countExames().subscribe(count => {
+      this.totalExames = count;
+    });
 
-this.apiService.CountEspecialidades().subscribe(count => {
-  this.totalEspecialidades = count;
-});
-}
+    // Obtém o número total de especialidades
+    this.apiService.CountEspecialidades().subscribe(count => {
+      this.totalEspecialidades = count;
+    });
+  }
 
 }

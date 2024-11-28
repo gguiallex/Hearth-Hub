@@ -1,6 +1,5 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap">
 
-
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -48,9 +47,7 @@
       <ion-button class="custom-login-button" fill="clear" type="submit" (click)="baixarPDF()">Baixar PDF</ion-button>
     </div>
     
-
     <div class="pacientes" lines="none" *ngIf="selectedOption === 'Paciente'">
-    
         <ion-select label="Nome:" lines="none" labelPlacement="floating" interface="popover" [(ngModel)]="selectedPaciente">
           <ion-select-option *ngFor="let pacientes of pacientes" [value]="pacientes">{{ pacientes.Nome }}</ion-select-option>
         </ion-select>
@@ -62,7 +59,6 @@
     </div>
 
     <div class="enfermeiros" *ngIf="selectedOption === 'Enfermeiro(a)'">
-        
       <ion-select label="Nome:" labelPlacement="floating" interface="popover" [(ngModel)]="selectedEnfermeiro">
         <ion-select-option *ngFor="let enfermeiro of enfermeiros" [value]="enfermeiro">{{ enfermeiro.Nome }}</ion-select-option>
       </ion-select>

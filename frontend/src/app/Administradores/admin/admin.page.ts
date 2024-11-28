@@ -8,10 +8,12 @@ import Chart, { LinearScale, CategoryScale, Title } from 'chart.js/auto';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
+// Interface para contagem de consultas por mês
 interface ContagemConsultasPorMes {
   [mes: number]: number;
 }
 
+// Declaração de módulo para o uso do plugin autoTable do jsPDF
 declare module 'jspdf' {
   interface jsPDF {
     autoTable: (options: any) => jsPDF;
@@ -24,24 +26,23 @@ declare module 'jspdf' {
   styleUrls: ['./admin.page.scss'],
 })
 export class AdminPage implements OnInit {
+  // Referência ao elemento do gráfico no template
   @ViewChild('myChart', { static: false }) chartElement!: ElementRef;
-  showOptions: boolean = false;
-  mostrarFundoBranco: boolean = true;
-  selectedOption: string = '';
-  medicos: any[] = [];
-  pacientes: any[] = [];
-  enfermeiros: any[] = [];
-  selectedMedico: any;
-  selectedPaciente: any;
-  selectedEnfermeiro: any;
-  dataInicio: string = '';
-  dataFim: string = '';
-  especialidades: { Especialidade: string }[] = [];
-  selectedEsp: string = "";
-  chart: any;
-  maxDate: string = '';
-
-
+  showOptions: boolean = false; // Controla a visibilidade das opções
+  mostrarFundoBranco: boolean = true; // Controla a visibilidade do fundo branco
+  selectedOption: string = ''; // Armazena a opção selecionada
+  medicos: any[] = []; // Armazena a lista de médicos
+  pacientes: any[] = []; // Armazena a lista de pacientes
+  enfermeiros: any[] = []; // Armazena a lista de enfermeiros
+  selectedMedico: any; // Armazena o médico selecionado
+  selectedPaciente: any; // Armazena o paciente selecionado
+  selectedEnfermeiro: any; // Armazena o enfermeiro selecionado
+  dataInicio: string = ''; // Data de início selecionada
+  dataFim: string = ''; // Data de fim selecionada
+  especialidades: { Especialidade: string }[] = []; // Lista de especialidades
+  selectedEsp: string = ""; // Especialidade selecionada
+  chart: any; // Objeto do gráfico
+  maxDate: string = ''; // Data máxima para seleção
 
   constructor(private authService: AuthService,
     private router: Router,
@@ -49,7 +50,7 @@ export class AdminPage implements OnInit {
     private apiService: ApiService,
     private alertService: AlertService,
     private toastController: ToastController) {
-    this.chartElement = {} as ElementRef;
+    this.chartElement = {} as ElementRef; // Inicializa o elemento do gráfico
   }
 
   ngOnInit() {
@@ -60,10 +61,11 @@ export class AdminPage implements OnInit {
       this.router.navigate(['/login']); // Redireciona para a página de login se não for um administrador
     }
 
-    this.carregarDados();
-    this.setMaxDate();
+    this.carregarDados(); // Carrega os dados iniciais
+    this.setMaxDate(); // Define a data máxima para os campos de data
   }
 
+  // Método para exibir um toast (notificação)
   async exibirToast(mensagem: string) {
     const toast = await this.toastController.create({
       message: mensagem,
@@ -73,6 +75,7 @@ export class AdminPage implements OnInit {
     toast.present();
   }
 
+  // Define a data máxima para os campos de data
   setMaxDate() {
     const now = new Date();
     const year = now.getFullYear();
@@ -80,18 +83,21 @@ export class AdminPage implements OnInit {
     this.maxDate = `${year}-${month}`;
   }
 
+  // Alterna a visibilidade das opções
   toggleOptions() {
     this.showOptions = !this.showOptions;
   }
 
+  // Método para selecionar uma opção (médico, enfermeiro, paciente)
   selectOption(option: string) {
-    this.apagarGrafico();
-    this.selectedOption = option;
-    this.showOptions = false;
+    this.apagarGrafico(); // Apaga o gráfico atual
+    this.selectedOption = option; // Define a opção selecionada
+    this.showOptions = false; // Esconde as opções
   }
 
+  // Carrega os dados iniciais da API
   carregarDados() {
-
+    // Carrega especialidades
     this.apiService.getEspecialidades().subscribe(
       especialidades => {
         this.especialidades = especialidades;
@@ -101,6 +107,7 @@ export class AdminPage implements OnInit {
       }
     );
 
+    // Carrega médicos
     this.apiService.getMedicos().subscribe(
       medicos => {
         this.medicos = medicos;
@@ -110,6 +117,7 @@ export class AdminPage implements OnInit {
       }
     );
 
+    // Carrega pacientes
     this.apiService.getPacientes().subscribe(
       pacientes => {
         this.pacientes = pacientes;
@@ -119,6 +127,7 @@ export class AdminPage implements OnInit {
       }
     );
 
+    // Carrega enfermeiros
     this.apiService.getEnfermeiros().subscribe(
       enfermeiros => {
         this.enfermeiros = enfermeiros;
@@ -130,18 +139,20 @@ export class AdminPage implements OnInit {
 
   }
 
+  // Método chamado após a visualização estar inicializada
   ngAfterViewInit() {
-    Chart.register(LinearScale, CategoryScale, Title);
+    Chart.register(LinearScale, CategoryScale, Title); // Registro das escalas do gráfico
   }
 
+  // Gera o gráfico para enfermeiros
   async gerarGraficoEnfermeiro() {
     if (!this.selectedEnfermeiro) {
       await this.alertService.showAlert("Escolha um enfermeiro antes de gerar o gráfico.");
       return;
     }
-  
+
     const enfermeiroCOREN: string = this.selectedEnfermeiro.COREN;
-  
+
     this.apiService.getExamesDoEnfermeiro(enfermeiroCOREN).subscribe(
       async exames => {
         console.log(enfermeiroCOREN);
@@ -157,17 +168,18 @@ export class AdminPage implements OnInit {
       }
     );
   }
-  
+
+  // Processa os exames dos enfermeiros
   async processarExamesEnfermeiro(exames: any[]) {
     const contagemExamesPorMedico: { [nome: string]: number } = {};
-  
+
     // Obter todos os CRMs dos exames
     const crms = [...new Set(exames.map(exame => exame.CRM))];
-  
+
     // Buscar os nomes dos médicos para os CRMs
     const medicoRequests = crms.map(crm => this.apiService.getMedicoByCRM(crm).toPromise());
     const medicoRespostas = await Promise.all(medicoRequests);
-  
+
     const medicoMap: { [crm: string]: string } = {};
     medicoRespostas.forEach(resposta => {
       if (resposta) {
@@ -176,7 +188,7 @@ export class AdminPage implements OnInit {
         });
       }
     });
-  
+
     // Contar exames por médico
     for (const exame of exames) {
       const nomeMedico = medicoMap[exame.CRM];
@@ -187,14 +199,15 @@ export class AdminPage implements OnInit {
         contagemExamesPorMedico[nomeMedico]++;
       }
     }
-  
+
     return contagemExamesPorMedico;
   }
-  
+
+  // Renderiza o gráfico para enfermeiros
   renderizarGraficoEnfermeiro(dados: { [nome: string]: number }) {
     const nomesMedicos = Object.keys(dados);
     const quantidades = Object.values(dados);
-  
+
     const canvas = document.createElement('canvas');
     canvas.width = 400;
     canvas.height = 400;
@@ -206,22 +219,22 @@ export class AdminPage implements OnInit {
       console.error("Contêiner de gráficos não encontrado");
       return;
     }
-  
+
     const ctx = canvas.getContext('2d');
     canvas.style.backgroundColor = 'white';
     canvas.style.borderRadius = '10px';
-  
+
     if (ctx) {
       new Chart(ctx, {
-        type: 'bar',
+        type: 'bar', // Tipo de gráfico: barras
         data: {
-          labels: nomesMedicos,
+          labels: nomesMedicos, // Labels dos médicos
           datasets: [{
             label: 'Exames Realizados',
-            data: quantidades,
+            data: quantidades, // Quantidade de exames realizados
             backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
+            borderWidth: 1 // Largura da borda das barras
           }]
         },
         options: {
@@ -244,6 +257,7 @@ export class AdminPage implements OnInit {
     }
   }
 
+  // Gera o gráfico para pacientes
   async gerarGraficoPaciente() {
     if (!this.selectedPaciente) {
       await this.alertService.showAlert("Escolha um paciente antes de gerar o gráfico.");
@@ -276,6 +290,7 @@ export class AdminPage implements OnInit {
     );
   }
 
+  // Processa as consultas dos pacientes
   processarConsultasPaciente(consultas: any[], especialidadesArray: any[]): { especialidades: string[], quantidades: number[] } {
     const contagemConsultasPorEspecialidade: { [especialidade: string]: number } = {};
 
@@ -306,25 +321,30 @@ export class AdminPage implements OnInit {
     };
   }
 
+  // Renderiza o grafico dos pacientes
   renderizarGraficoPaciente(dados: { especialidades: string[], quantidades: number[] }) {
+    // Cria um elemento canvas para renderizar o gráfico
     const canvas = document.createElement('canvas');
     canvas.width = 400;
     canvas.height = 400;
+    // Encontra o contêiner onde o gráfico será adicionado
     const container = document.getElementById('graficoContainer');
     if (container) {
-      container.innerHTML = '';
-      container.appendChild(canvas);
+      container.innerHTML = ''; // Limpa qualquer conteúdo existente no contêiner
+      container.appendChild(canvas); // Adiciona o novo canvas ao contêiner
     } else {
       console.error("Contêiner de gráficos não encontrado");
       return;
     }
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d'); // Obtém o contexto 2D do canvas para desenhar o gráfico
 
+    // Estilos do canvas
     canvas.style.backgroundColor = 'white';
     canvas.style.borderRadius = '10px';
 
     if (ctx) {
+      // Cria um gráfico de barras usando Chart.js
       new Chart(ctx, {
         type: 'bar',
         data: {
@@ -340,7 +360,7 @@ export class AdminPage implements OnInit {
         options: {
           scales: {
             y: {
-              beginAtZero: true
+              beginAtZero: true // O eixo Y começa do zero
             }
           }
         }
@@ -350,6 +370,7 @@ export class AdminPage implements OnInit {
     }
   }
 
+  // Gera o gráfico para medicos
   async gerarGraficoMedico() {
     if (!this.dataInicio || !this.dataFim || !this.selectedMedico) {
       await this.alertService.showAlert("Preencha todos os campos para gerar o gráfico.");
@@ -371,6 +392,7 @@ export class AdminPage implements OnInit {
     );
   }
 
+  // Processa as consultas dos Medicos
   processarConsultasMedico(consultas: any[], anoInicio: number, mesInicio: number, anoFim: number, mesFim: number) {
     const dadosProcessados = {
       meses: [] as string[],
@@ -441,6 +463,7 @@ export class AdminPage implements OnInit {
     return dadosProcessados;
   }
 
+  // Renderiza o grafico dos medicos
   renderizarGraficoMedico(dados: any) {
     // Cria um novo elemento canvas
     const novoCanvas = document.createElement('canvas');
@@ -493,6 +516,7 @@ export class AdminPage implements OnInit {
     }
   }
 
+  // Apaga o grafico gerado
   apagarGrafico() {
     const container = document.getElementById('graficoContainer');
     if (container) {
@@ -500,6 +524,7 @@ export class AdminPage implements OnInit {
     }
   }
 
+  // Baixa as informações em formato PDF
   baixarPDF() {
     const doc = new jsPDF();
     const title = this.selectedOption === 'Paciente' ? 'Consultas Feitas por Especialidade' :
@@ -536,28 +561,8 @@ export class AdminPage implements OnInit {
           const canvas = document.createElement('canvas');
           canvas.width = 400;
           canvas.height = 400;
-          const ctx = canvas.getContext('2d');
-          /*if (ctx) {
-            this.renderizarGraficoMedico(dadosProcessados); // Aqui você renderiza o gráfico novamente para o canvas
-            const dataURL = canvas.toDataURL('image/png');
-
-            // Adicionar a imagem do gráfico ao PDF
-            const imgWidth = 180; // Largura da imagem no PDF
-            const imgHeight = 100; // Altura da imagem no PDF
-            const imgX = (pageWidth - imgWidth) / 2; // Posição X centralizada
-            const imgY = currentY + 20; // Posição Y após a tabela
-
-            doc.addImage(dataURL, 'PNG', imgX, imgY, imgWidth, imgHeight);
-            currentY = imgY + imgHeight + 10;
-
-            // Agora que a tabela foi adicionada ao documento, podemos salvar o PDF
-            doc.save('relatorio_Medico.pdf');
-          }
-          else {
-            console.error("Contexto 2D do canvas não disponível.");
-          }*/
-            doc.save('relatorio_Medico.pdf');
-            this.exibirToast('Relatório baixado com sucesso! Verifique sua pasta de Downloads');
+          doc.save('relatorio_Medico.pdf');
+          this.exibirToast('Relatório baixado com sucesso! Verifique sua pasta de Downloads');
         },
         error => {
           console.error('Erro ao carregar consultas:', error);
@@ -597,24 +602,24 @@ export class AdminPage implements OnInit {
             canvas.width = 400;
             canvas.height = 400;
             const ctx = canvas.getContext('2d');
-           /* if (ctx) {
-              this.renderizarGraficoPaciente(dadosProcessados); // Aqui você renderiza o gráfico novamente para o canvas
-              const dataURL = canvas.toDataURL('image/png');
-
-              // Adicionar a imagem do gráfico ao PDF
-              const imgWidth = 180; // Largura da imagem no PDF
-              const imgHeight = 100; // Altura da imagem no PDF
-              const imgX = (pageWidth - imgWidth) / 2; // Posição X centralizada
-              const imgY = currentY + 20; // Posição Y após a tabela
-
-              doc.addImage(dataURL, 'PNG', imgX, imgY, imgWidth, imgHeight);
-              currentY = imgY + imgHeight + 10;
-
-              // Agora que a tabela e o gráfico foram adicionados ao documento, podemos salvar o PDF
-              doc.save('relatorio_Medico.pdf');
-            } else {
-              console.error("Contexto 2D do canvas não disponível.");
-            }*/
+            /* if (ctx) {
+               this.renderizarGraficoPaciente(dadosProcessados); // Aqui você renderiza o gráfico novamente para o canvas
+               const dataURL = canvas.toDataURL('image/png');
+ 
+               // Adicionar a imagem do gráfico ao PDF
+               const imgWidth = 180; // Largura da imagem no PDF
+               const imgHeight = 100; // Altura da imagem no PDF
+               const imgX = (pageWidth - imgWidth) / 2; // Posição X centralizada
+               const imgY = currentY + 20; // Posição Y após a tabela
+ 
+               doc.addImage(dataURL, 'PNG', imgX, imgY, imgWidth, imgHeight);
+               currentY = imgY + imgHeight + 10;
+ 
+               // Agora que a tabela e o gráfico foram adicionados ao documento, podemos salvar o PDF
+               doc.save('relatorio_Medico.pdf');
+             } else {
+               console.error("Contexto 2D do canvas não disponível.");
+             }*/
             doc.save('relatorio_paciente.pdf');
             this.exibirToast('Relatório baixado com sucesso! Verifique sua pasta de Downloads');
           }).catch(error => {
@@ -657,8 +662,9 @@ export class AdminPage implements OnInit {
         }
       );
     }
-}
+  }
 
+  // Adiciona a tabela com as informações do medico ao PDF
   adicionarTabelaAoPDF(doc: jsPDF, dados: any, startY: number) {
     if (!dados || !dados.meses || !dados.quantidades) {
       console.error("Dados inválidos para criar a tabela no PDF.");
@@ -681,10 +687,11 @@ export class AdminPage implements OnInit {
     });
   }
 
+  // Adiciona a tabela com as informações do enfermeiro ao PDF
   adicionarTabelaDeExamesPorEnfermeiroAoPDF(doc: jsPDF, dados: { [nome: string]: number }, startY: number) {
     if (!dados || Object.keys(dados).length === 0) {
-        console.error("Dados inválidos ou vazios para criar a tabela no PDF.");
-        return;
+      console.error("Dados inválidos ou vazios para criar a tabela no PDF.");
+      return;
     }
 
     // Converte o objeto de dados em um array de linhas para a tabela
@@ -696,12 +703,13 @@ export class AdminPage implements OnInit {
 
     // Cria a tabela no PDF
     doc.autoTable({
-        head: [['Médicos', 'Qtde. Exames Realizados']],
-        body: rows,
-        startY: startY
+      head: [['Médicos', 'Qtde. Exames Realizados']],
+      body: rows,
+      startY: startY
     });
-}
+  }
 
+  // Adiciona a tabela com as informações do paciente ao PDF
   adicionarTabelaDeConsultasPorPacienteAoPDF(doc: jsPDF, dados: any, startY: number) {
     if (!dados || !dados.especialidades || !dados.quantidades) {
       console.error("Dados inválidos para criar a tabela no PDF.");
