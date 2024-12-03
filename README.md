@@ -9,7 +9,6 @@
 - [Tecnologias Utilizadas](#-tecnologias-utilizadas)
 - [Pré-requisitos](#-pré-requisitos)
 - [Instalação e Execução](#-instalação-e-execução)
-- [Telas do Aplicativo](#-telas-do-aplicativo)
 - [Licença](#-licença)
 
 ---
