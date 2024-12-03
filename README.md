@@ -72,7 +72,7 @@ Antes de começar, certifique-se de ter:
     - Atualize o arquivo `.env` com suas credenciais do MySQL.
 4. **Execute o backend:**
     ```bash
-    npm run start:backend
+    npm run dev
     ```
 5. **Execute o frontend:**
     ```bash
