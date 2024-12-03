@@ -10,7 +10,6 @@
 - [Pré-requisitos](#-pré-requisitos)
 - [Instalação e Execução](#-instalação-e-execução)
 - [Telas do Aplicativo](#-telas-do-aplicativo)
-- [Contribuição](#-contribuição)
 - [Licença](#-licença)
 
 ---
