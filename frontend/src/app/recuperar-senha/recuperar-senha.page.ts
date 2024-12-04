@@ -10,40 +10,46 @@ import { AlertService } from '../services/alert.service';
 })
 export class RecuperarSenhaPage implements OnInit {
 
-  constructor(private apiService: ApiService, private toastController: ToastController, private alertService: AlertService) { }
+  // Inicialização das variáveis de controle
+  email = ''; // Armazena o e-mail fornecido pelo usuário
+  selectedOption: string = ''; // Armazena o tipo de conta selecionado pelo usuário
 
-  email = '';
-  selectedOption: string = '';
+  constructor(private apiService: ApiService, private toastController: ToastController, private alertService: AlertService) { }
 
   ngOnInit() {
   }
 
+  // Função chamada ao selecionar o tipo de conta
   selectOption(event: any) {
-    this.selectedOption = event.detail.value;
-    console.log('Opção selecionada:', this.selectedOption);
+    this.selectedOption = event.detail.value; // Captura o valor selecionado pelo usuário
   }
 
+  // Função para solicitar a recuperação de senha
   async solicitarRecuperacao() {
-
+    // Verifica se o e-mail e a opção de conta foram preenchidos
     if (!this.email || !this.selectedOption) {
       this.alertService.showAlert('Escolha o tipo de conta que deseja redefinir a senha e preencha o campo de email para enviarmos o link de redefinição de senha');
       return;
     }
 
     try {
+      // Chamada para o serviço de recuperação de senha
       await this.apiService.solicitarRecuperacaoSenha(this.email, this.selectedOption).subscribe(
-         async () => {
+        async () => {
+          // Exibe mensagem de sucesso
           this.alertService.showAlert('Solicitação de senha enviada com sucesso, verifique sua caixa de entrada!');
         },
-         async (error) => {
+        async (error) => {
+          // Exibe mensagem de erro
           console.error('Erro ao solicitar recuperação de senha:', error);
           this.alertService.showAlert('Erro ao enviar solicitação de recuperação de senha, tente novamente');
         }
       );
     } catch (error) {
+      // Tratamento de erros genéricos
       console.error('Erro ao solicitar recuperação de senha:', error);
       this.alertService.showAlert('Erro ao enviar solicitação de recuperação de senha, tente novamente');
-    } 
+    }
   }
 
 }

@@ -1,7 +1,7 @@
 import { AlertService } from './../services/alert.service';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 
 @Component({
@@ -10,12 +10,16 @@ import { LoadingController } from '@ionic/angular';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage {
+
+  // Variáveis para manipulação de registros e exibição
   showOptions: boolean = false;
   selectedOption: string = '';
   medicos: {CRM: string, Email: string}[] = [];
   enfermeiros: {COREN:string, Email: string}[]=[];
   pacientes: {CPF:string, Email: string}[]=[];
   administradores: {CPF:string, Email: string}[]=[];
+
+  // Variáveis de input para o formulário
   crm: string = '';
   nome: string ='';
   email: string = '';
@@ -32,9 +36,11 @@ export class RegisterPage {
               private loadingController: LoadingController) {}
   
   ngOnInit() {
+    // Carrega as especialidades ao inicializar a página
     this.carregarEspecialidades();
   }
 
+  // Carrega especialidades disponíveis
   carregarEspecialidades() {
     this.apiService.getEspecialidades().subscribe(
       especialidades => {
@@ -46,16 +52,19 @@ export class RegisterPage {
     );
   }
 
+  // Alterna a exibição das opções
   toggleOptions() {
     this.showOptions = !this.showOptions;
   }
 
+  // Define a opção selecionada
   selectOption(event: any) {
     this.selectedOption = event.detail.value;
     this.showOptions = false;
     console.log('Opção selecionada:', this.selectedOption);
   }
 
+  // Registra o usuário
   async register() {
 
     const loading = await this.loadingController.create({
@@ -118,12 +127,14 @@ export class RegisterPage {
         return;
     }
 
+    // Alerta se o e-mail já está em uso
     if (emailExiste) {
       await this.alertService.showAlert('Este e-mail já está registrado.');
       await loading.dismiss();
       return;
     }
 
+    // Alerta se o identificador já está em uso
       if (chaveExiste) {
         switch (this.selectedOption) {
           case 'Médico':
@@ -141,6 +152,7 @@ export class RegisterPage {
         return;
       }
 
+      // Chamada para criar o usuário correspondente
       let response;
       switch (this.selectedOption) {
         case 'Médico':
@@ -173,11 +185,9 @@ export class RegisterPage {
   }
   }
 
+  // Formata o CPF com máscara
   formatarCPF() {
-    // Remove caracteres indesejados, como pontos e traços
     this.cpf = this.cpf.replace(/\D/g, '');
-    
-    // Adiciona os pontos e o traço conforme a formatação do CPF
     this.cpf = this.cpf.replace(/(\d{3})(\d)/, '$1.$2');
     this.cpf = this.cpf.replace(/(\d{3})(\d)/, '$1.$2');
     this.cpf = this.cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');

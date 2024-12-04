@@ -2,7 +2,6 @@ import { AlertService } from '../services/alert.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { AuthGuard } from '../services/auth-guard.service';
 
 @Component({
   selector: 'app-login',
@@ -10,39 +9,42 @@ import { AuthGuard } from '../services/auth-guard.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  email: string = "";
-  senha: string = "";
+  email: string = ""; // Armazena o email do usuário
+  senha: string = ""; // Armazena a senha do usuário
 
   constructor(private authService: AuthService, private router: Router, private alertService: AlertService, private route: ActivatedRoute) { }
 
   ngOnInit() { 
-      // Verifica se há parâmetros na URL (token de confirmação)
+      // Verifica se há parâmetros na URL (como o token de confirmação de conta)
       this.route.queryParams.subscribe(params => {
         const token = params['token'];
         if (token) {
-          this.validarConta(token);
+          this.validarConta(token);  // Chama a função de validação se um token for encontrado
         }
       });
    }
 
+   // Função para validar a conta do usuário através do token
    validarConta(token: string) {
     console.log(token);
     this.authService.validarConta(token).subscribe(
       (response: any) => {
         this.alertService.showAlert('Conta ativada com sucesso! Faça login para continuar.');
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login']); // Redireciona para a página de login após a validação
       },
       error => {
         console.error('Erro ao validar conta:', error);
-        this.alertService.showAlert('Erro ao validar conta: ' + error);
+        this.alertService.showAlert('Erro ao validar conta: ' + error); // Exibe mensagem de erro
       }
     );
   }
 
+  // Função para realizar o login
   login() {
     this.authService.login(this.email, this.senha).subscribe(
       (response: any) => {
 
+        // Verifica se os campos de email e senha estão preenchidos
         if(!this.email || !this.senha){
           this.alertService.showAlert('Preencha todos os campos para efetuar o login')
           return;
@@ -50,15 +52,16 @@ export class LoginPage implements OnInit {
   
         
         if (response.token) {
+          // Armazena o token e informações do perfil no localStorage
           localStorage.setItem('token', response.token);
-          localStorage.setItem('perfil', response.perfil); // Armazene o perfil do usuário localmente
+          localStorage.setItem('perfil', response.perfil);
           localStorage.setItem('situação', response.situação);
           console.log('Login bem sucedido! Token armazenado.');
           console.log(response.token, response.perfil, response.situação);
   
-          // Redirecione o usuário com base no perfil
+          // Redireciona o usuário com base no perfil e situação da conta
           switch (response.perfil) {
-            case 'P':
+            case 'P': // Paciente
               if(response.situação == 'Validado'){
               this.router.navigate(['/paciente']);
             }else if(response.situação == 'Bloqueado') {
@@ -67,7 +70,7 @@ export class LoginPage implements OnInit {
               this.alertService.showAlert('Erro ao fazer login: Sua conta esta pendente! Entre no seu Email e confirme que é você para poder acessar sua conta');
             }
               break;
-            case 'M':
+            case 'M': // Médico
               if(response.situação == 'Validado'){
                 this.router.navigate(['/medico']);
               }else if(response.situação == 'Bloqueado') {
@@ -76,7 +79,7 @@ export class LoginPage implements OnInit {
                 this.alertService.showAlert('Erro ao fazer login: Sua conta esta pendente! Entre no seu Email e confirme que é você para poder acessar sua conta');
               }
               break;
-            case 'E':
+            case 'E': // Enfermeiro
               if(response.situação == 'Validado'){
                 this.router.navigate(['/enfermeiro']);
               }else if(response.situação == 'Bloqueado') {
@@ -85,7 +88,7 @@ export class LoginPage implements OnInit {
                 this.alertService.showAlert('Erro ao fazer login: Sua conta esta pendente! Entre no seu Email e confirme que é você para poder acessar sua conta');
               }
               break;
-            case 'A':
+            case 'A': // Administrador
               if(response.situação == 'Validado'){
                 this.router.navigate(['/home-adm']);
               }else if(response.situação == 'Bloqueado') {
@@ -96,7 +99,7 @@ export class LoginPage implements OnInit {
               break;
             default:
               console.error('Perfil do usuário não reconhecido:', response.perfil);
-              // Redirecione para uma página padrão ou exiba uma mensagem de erro
+              this.alertService.showAlert('Perfil do usuário não reconhecido');
               break;
           }
         } else {
