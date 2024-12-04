@@ -1,76 +1,87 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express'); // Importa o módulo Express para criar rotas
+const router = express.Router(); // Cria uma instância do roteador do Express
 
-const EspController = require('./controllers/EspController');
-const espMiddlewares = require('./middlewares/espMiddlewares');
+const EspController = require('./controllers/EspController'); // Importa os controladores responsáveis pela lógica das especialidades
+const espMiddlewares = require('./middlewares/espMiddlewares'); // Importa os middlewares de validação para especialidades
 
-const UsersController = require('./controllers/UsersController');
-const usersMiddlewares = require('./middlewares/usersMiddlewares');
+const UsersController = require('./controllers/UsersController'); // Importa os controladores responsáveis pela lógica dos usuários
+const usersMiddlewares = require('./middlewares/usersMiddlewares'); // Importa os middlewares de validação para usuários
 
-const authController = require('./controllers/AuthController');
+const authController = require('./controllers/AuthController'); // Importa o controlador de autenticação
 
-
+// Rota básica de teste para verificar se o servidor está funcionando
 router.get("/", (req, res) => {
     return res.json("hello world");
 });
 
-router.get('/medicos', UsersController.getAllMedicos);
-router.post('/medicos', usersMiddlewares.validateBodyMedicos, UsersController.createMedico);
-router.put('/medico/:CRM', usersMiddlewares.validateBodyMedicos, UsersController.updateMedico);
-router.delete('/medico/:CRM', UsersController.deleteMedico);
-router.get('/medicos/especialidade/:especialidade', EspController.getAllMedicosByEspecialidade);
-router.get('/medicos/:CRM', UsersController.getMedicoByCRM);
+// CRUD de Médicos
+router.get('/medicos', UsersController.getAllMedicos); // Retorna todos os médicos
+router.post('/medicos', usersMiddlewares.validateBodyMedicos, UsersController.createMedico); // Cria um novo médico
+router.put('/medico/:CRM', usersMiddlewares.validateBodyMedicos, UsersController.updateMedico); // Atualiza médico pelo CRM
+router.delete('/medico/:CRM', UsersController.deleteMedico); // Deleta médico pelo CRM
+router.get('/medicos/especialidade/:especialidade', EspController.getAllMedicosByEspecialidade); // Retorna médicos por especialidade
+router.get('/medicos/:CRM', UsersController.getMedicoByCRM); // Retorna médico pelo CRM
 
-router.get('/enfermeiros', UsersController.getAllEnfermeiros);
-router.post('/enfermeiros', usersMiddlewares.validateBodyEnfermeiros, UsersController.createEnfermeiro);
-router.put('/enfermeiro/:COREN', usersMiddlewares.validateBodyEnfermeiros, UsersController.updateEnfermeiro);
-router.delete('/enfermeiro/:COREN', UsersController.deleteEnfermeiro);
-router.get('/enfermeiro/:COREN', UsersController.getEnfermeiroByCOREN);
+// CRUD de Enfermeiros
+router.get('/enfermeiros', UsersController.getAllEnfermeiros); // Retorna todos os enfermeiros
+router.post('/enfermeiros', usersMiddlewares.validateBodyEnfermeiros, UsersController.createEnfermeiro); // Cria um novo enfermeiro
+router.put('/enfermeiro/:COREN', usersMiddlewares.validateBodyEnfermeiros, UsersController.updateEnfermeiro); // Atualiza enfermeiro pelo COREN
+router.delete('/enfermeiro/:COREN', UsersController.deleteEnfermeiro); // Deleta enfermeiro pelo COREN
+router.get('/enfermeiro/:COREN', UsersController.getEnfermeiroByCOREN); // Retorna enfermeiro pelo COREN
 
-router.get('/pacientes', UsersController.getAllPacientes);
-router.get('/paciente/:Email', UsersController.getPacienteByEmail);
-router.post('/pacientes', usersMiddlewares.validateBodyPacientes, UsersController.createPaciente);
-router.put('/paciente/:Email', usersMiddlewares.validateBodyPacientes, UsersController.updatePaciente);
-router.delete('/paciente/:Email',UsersController.deletePaciente);
+// CRUD de Pacientes
+router.get('/pacientes', UsersController.getAllPacientes); // Retorna todos os pacientes
+router.get('/paciente/:Email', UsersController.getPacienteByEmail); // Retorna paciente pelo Email
+router.post('/pacientes', usersMiddlewares.validateBodyPacientes, UsersController.createPaciente); // Cria um novo paciente
+router.put('/paciente/:Email', usersMiddlewares.validateBodyPacientes, UsersController.updatePaciente); // Atualiza paciente pelo Email
+router.delete('/paciente/:Email',UsersController.deletePaciente); // Deleta paciente pelo Email
 
-router.get('/administradores', UsersController.getAllAdministradores);
-router.get('/administrador/:Email', UsersController.getAdministradorByEmail);
-router.post('/administradores', usersMiddlewares.validateBodyAdministradores, UsersController.createAdministrador);
-router.put('/administrador/:Email', usersMiddlewares.validateBodyAdministradores, UsersController.updateAdministrador);
-router.delete('/administrador/:Email', UsersController.deleteAdministrador);
+// CRUD de Administradores
+router.get('/administradores', UsersController.getAllAdministradores); // Retorna todos os administradores
+router.get('/administrador/:Email', UsersController.getAdministradorByEmail); // Retorna administrador pelo Email
+router.post('/administradores', usersMiddlewares.validateBodyAdministradores, UsersController.createAdministrador); // Cria um novo administrador
+router.put('/administrador/:Email', usersMiddlewares.validateBodyAdministradores, UsersController.updateAdministrador); // Atualiza administrador pelo Email
+router.delete('/administrador/:Email', UsersController.deleteAdministrador); // Deleta administrador pelo Email
 
-router.get('/especialidades', EspController.getAllEsps);
-router.post('/especialidade', espMiddlewares.validateBodyEspecialidades, EspController.createEsp);
-router.delete('/especialidade/:CodEsp', EspController.deleteEsp);
-router.put('/especialidade/:CodEsp', espMiddlewares.validateBodyEspecialidades, EspController.updateEsp);
-router.get('/especialidades/:CRM', EspController.getEspecialidadeByCRM);
+// CRUD de Especialidades
+router.get('/especialidades', EspController.getAllEsps); // Retorna todas as especialidades
+router.post('/especialidade', espMiddlewares.validateBodyEspecialidades, EspController.createEsp); // Cria uma nova especialidade
+router.delete('/especialidade/:CodEsp', EspController.deleteEsp); // Deleta especialidade pelo código
+router.put('/especialidade/:CodEsp', espMiddlewares.validateBodyEspecialidades, EspController.updateEsp); // Atualiza especialidade pelo código
+router.get('/especialidades/:CRM', EspController.getEspecialidadeByCRM); // Retorna especialidade pelo CRM
 
-router.get('/exames', EspController.getAllExames);
-router.get('/exame/:CodExames', EspController.getExameByCod);
-router.post('/exame', espMiddlewares.validateBodyExames, EspController.createExame);
-router.delete('/exame/:CodExames', EspController.deleteExame);
-router.put('/exame/:CodExames', espMiddlewares.validateBodyExames, EspController.updateExame);
+// CRUD de Exames
+router.get('/exames', EspController.getAllExames); // Retorna todos os exames
+router.get('/exame/:CodExames', EspController.getExameByCod); // Retorna exame pelo código
+router.post('/exame', espMiddlewares.validateBodyExames, EspController.createExame); // Cria um novo exame
+router.delete('/exame/:CodExames', EspController.deleteExame); // Deleta exame pelo código
+router.put('/exame/:CodExames', espMiddlewares.validateBodyExames, EspController.updateExame); // Atualiza exame pelo código
 
-router.get('/examesPrescritos', EspController.getAllExamesPresc);
-router.post('/examePrescrito', espMiddlewares.validateBodyExamesPresc, EspController.createExamePresc);
-router.get('/examePrescrito/paciente/:CPF', EspController.getAllExamesByPacientes);
-router.get('/examePrescrito/consulta/:IdConsulta', EspController.getExameByIdConsulta);
-router.get('/examesPrescritos/:COREN', EspController.getExamesByEnf);
-router.put('/examePrescrito/:IdConsulta/:CodExames', EspController.updateExamePresc);
+// Exames Preescritos
+router.get('/examesPrescritos', EspController.getAllExamesPresc); // Retorna todos os exames prescritos
+router.post('/examePrescrito', espMiddlewares.validateBodyExamesPresc, EspController.createExamePresc); // Cria um exame prescrito
+router.get('/examePrescrito/paciente/:CPF', EspController.getAllExamesByPacientes); // Retorna exames prescritos por CPF do paciente
+router.get('/examePrescrito/consulta/:IdConsulta', EspController.getExameByIdConsulta); // Retorna exame por ID da consulta
+router.get('/examesPrescritos/:COREN', EspController.getExamesByEnf); // Retorna exames pelo COREN do enfermeiro
+router.put('/examePrescrito/:IdConsulta/:CodExames', EspController.updateExamePresc); // Atualiza exame prescrito pelo ID da consulta e código
 
-router.post('/autenticar', authController.autenticar);
-router.post('/gerar-token-confirmacao', authController.gerarTokenConfirmaçãoDeConta);
-router.post('/confirmar-conta', authController.validarConta);
+// Autenticação
+router.post('/autenticar', authController.autenticar); // Autentica usuário
+router.post('/gerar-token-confirmacao', authController.gerarTokenConfirmaçãoDeConta); // Gera token de confirmação de conta
+router.post('/confirmar-conta', authController.validarConta); // Valida conta com token
 
-router.get('/consultas', EspController.getAllConsult);
-router.post('/consultas', EspController.createConsult);
-router.get('/consultas/medico/:CRM', EspController.getAllConsultasByCRM);
-router.get('/consultas/paciente/:CPF', EspController.getAllConsultasByPacientes);
+// Consultas
+router.get('/consultas', EspController.getAllConsult); // Retorna todas as consultas
+router.post('/consultas', EspController.createConsult); // Cria uma nova consulta
+router.get('/consultas/medico/:CRM', EspController.getAllConsultasByCRM); // Retorna consultas pelo CRM do Médico
+router.get('/consultas/paciente/:CPF', EspController.getAllConsultasByPacientes); // Retorna consultas pelo CPF do paciente
 
-router.post('/recuperar-senha', authController.gerarTokenRecuperacaoSenha);
-router.post('/redefinir-senha', authController.redefinirSenhaPeloLink);
+// Recuperação de Senha
+router.post('/recuperar-senha', authController.gerarTokenRecuperacaoSenha); // Gera token para recuperação de senha
+router.post('/redefinir-senha', authController.redefinirSenhaPeloLink); // Redefine senha pelo link com token
 
-router.post('/conta-aprovada', authController.emailAprovado);
+// Notificação de Conta Aprovada
+router.post('/conta-aprovada', authController.emailAprovado); // Envia e-mail de conta aprovada
 
-
+// Exporta o roteador para ser utilizado no servidor principal
 module.exports = router;

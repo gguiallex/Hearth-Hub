@@ -1,21 +1,27 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer'); // Importa o módulo nodemailer para envio de e-mails
 
+// Variáveis de ambiente para o usuário e senha do e-mail de suporte
+const USER = process.env.SUPPORT_USER; // Usuário do e-mail de suporte
+const PASS = process.env.SUPPORT_PASS; // Senha do e-mail de suporte
+
+// Configura o transporte para envio de e-mails usando o serviço SMTP do Outlook
 const transport = nodemailer.createTransport({
-    host: 'smtp-mail.outlook.com',
-    port: 587,
-    secure: false, //true para 465 e false para outras
+    host: 'smtp-mail.outlook.com', // Servidor SMTP do Outlook
+    port: 587, // Porta para conexões seguras (STARTTLS)
+    secure: false, // 'true' para porta 465 (SSL) e 'false' para 587 (STARTTLS)
     auth: {
-        user: 'HearthHub@outlook.com',
-        pass: 'He4rthhubb',
+        user: USER, // E-mail de suporte
+        pass: PASS, // Senha do e-mail de suporte
     }
 });
 
+// Função para enviar e-mail de recuperação de senha
 const enviarEmailRecuperacaoSenha = async (destinatario, token) => {
     try {
         const info = await transport.sendMail({
-            from: 'HealthHub <HearthHub@outlook.com>',
-            to: destinatario,
-            subject: 'Recuperação de senha',
+            from: `HealthHub <${USER}>`, // Remetente
+            to: destinatario, // Destinatário
+            subject: 'Recuperação de senha', // Assunto do e-mail
             html: `                <h1>Olá!</h1>
                 <p>Recebemos uma solicitação para redefinir a senha da sua conta no HealthHub.</p>
                 <p>Se você solicitou essa alteração, clique no link abaixo para redefinir sua senha:</p>
@@ -27,12 +33,13 @@ const enviarEmailRecuperacaoSenha = async (destinatario, token) => {
     }catch (error){
         console.error('Erro ao enviar email de recuperação de senha: ', error);
     }
-}//funcionando
+}
 
+// Função para enviar e-mail de confirmação de conta
 const enviarEmailConfirmaçãoDeConta = async (destinatario, token) => {
     try {
         const info = await transport.sendMail({
-            from: 'HealthHub <HearthHub@outlook.com',
+            from: `HealthHub <${USER}>`,
             to: destinatario,
             subject: 'Confirmação de conta',
             html:`<h1>Olá!</h1>
@@ -46,12 +53,13 @@ const enviarEmailConfirmaçãoDeConta = async (destinatario, token) => {
     }catch (error){
         console.error('Erro ao enviar email de confirmação de conta: ', error);
     }
-}//funcionando
+}
 
+// Função para enviar e-mail de aprovação de conta
 const enviarEmailAprovaçãoConfirmada = async (destinatario) => {
     try {
         const info = await transport.sendMail({
-            from: 'HealthHub <HearthHub@outlook.com',
+            from: `HealthHub <${USER}>`,
             to: destinatario,
             subject: 'Conta aprovada com sucesso!',
             html:       `<h1>Olá!</h1>
@@ -66,12 +74,13 @@ const enviarEmailAprovaçãoConfirmada = async (destinatario) => {
     }catch (error){
         console.error('Erro ao enviar email de aprovação de conta: ', error);
     }
-}//funcionando
+}
 
+// Função para enviar e-mail de pendências administrativas
 const enviarEmailPessoasPendentes = async (destinatario) => {
     try {
         const info = await transport.sendMail({
-            from: 'HealthHub <HearthHub@outlook.com',
+            from: `HealthHub <${USER}>`,
             to: destinatario,
             subject: 'Você tem novos usuários para verificar!',
             html:       `<h1>Caro Administrador(a),</h1>
@@ -85,12 +94,13 @@ const enviarEmailPessoasPendentes = async (destinatario) => {
     }catch (error){
         console.error('Erro ao enviar email de pessoas pendentes: ', error);
     }
-}//funcionando
+}
 
+// Função para enviar e-mail de aviso de aprovação
 const enviarEmailAvisoAprovação = async (destinatario, nome) => {
     try {
         const info = await transport.sendMail({
-            from: 'HealthHub <HearthHub@outlook.com',
+            from: `HealthHub <${USER}>`,
             to: destinatario,
             subject: 'Parabéns pela sua aprovação!',
             html:        `<h1>Caro(a) ${nome},</h1>
@@ -106,10 +116,11 @@ const enviarEmailAvisoAprovação = async (destinatario, nome) => {
     }
 };
 
+// Função para enviar e-mail de confirmação de conta e aguardamento de aprovação
 const enviarEmailContaCriada = async (destinatario) => {
     try {
         const info = await transport.sendMail({
-            from: 'HealthHub <HearthHub@outlook.com',
+            from: `HealthHub <${USER}>`,
             to: destinatario,
             subject: 'Falta pouco para você fazer parte da nossa equipe!',
             html:        `<h1>Caro(a) Usuário(a),</h1>
@@ -123,8 +134,9 @@ const enviarEmailContaCriada = async (destinatario) => {
     }catch (error){
         console.error('Erro ao enviar email de criação de conta: ', error);
     }
-}//funcionando
+}
 
+// Exporta as funções para serem utilizadas em outras partes da aplicação
 module.exports = {
     enviarEmailRecuperacaoSenha,
     enviarEmailConfirmaçãoDeConta,
