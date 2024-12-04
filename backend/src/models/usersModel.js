@@ -1,16 +1,23 @@
-const connection = require('./connection.js');
+const connection = require('./connection.js'); // Importa a conexão com o banco de dados MySQL
+
+// Importa funções de envio de e-mails para notificações
 const { enviarEmailPessoasPendentes, enviarEmailContaCriada } = require('../services/EmailService');
 
+// ====================== MÉDICOS ======================
+
+// Obtém todos os médicos do banco de dados
 const getAllMedicos = async () => {
     const medicos = await connection.execute('SELECT * FROM médicos');
     return medicos;
 };
 
+// Obtém um médico pelo CRM
 const getMedicoByCRM = async (CRM) => {
     const [medico] = await connection.execute('SELECT * FROM médicos WHERE CRM = ?', [CRM]);
     return medico;
 };
 
+// Cria um novo médico no banco de dados
 const createMedico = async (medico) => {
     const { CRM, Nome, Especialidade, Email, Senha } = medico;
 
@@ -36,15 +43,16 @@ const createMedico = async (medico) => {
         throw new Error('A especialidade fornecida não é válida.');
     }
 
+    // Insere o médico no banco de dados com situação inicial 'Suspenso'
     const query = 'INSERT INTO médicos(CRM, Nome, Especialidade, Email, Senha, Perfil, Situação) VALUES (?, ?, ?, ?, ?, ?, ?)';
-
     const [createdMedico] = await connection.execute(query, [CRM, Nome, Especialidade, Email, Senha, 'M', 'Suspenso']);
     
+    // Envia um e-mail informando a criação da conta
     await enviarEmailContaCriada(Email);
 
+    // Notifica os administradores sobre a nova conta pendente
     const [admins] = await connection.execute('SELECT Email FROM administrador');
     const adminEmails = admins.map(admin => admin.Email);
-
     for(const adminEmail of adminEmails) {
         await enviarEmailPessoasPendentes(adminEmail);
     }
@@ -52,6 +60,7 @@ const createMedico = async (medico) => {
     return { createdMedico };
 };
 
+// Atualiza um médico pelo CRM
 const updateMedico = async (CRM, medico) => {
 
     const { Nome, Especialidade, Email, Senha, Situação } = medico;
@@ -62,21 +71,27 @@ const updateMedico = async (CRM, medico) => {
     return updatedMedico;
 };
 
+// Deleta um médico pelo CRM
 const deleteMedico = async (CRM) => {
     const [removedMedico] = await connection.execute('DELETE FROM médicos where CRM = ?', [CRM]);
     return removedMedico;
 }
 
+// ====================== ENFERMEIROS ======================
+
+// Obtém todos os enfermeiros do banco de dados
 const getAllEnfermeiros = async () => {
     const enfermeiros = await connection.execute('SELECT * FROM enfermeiros');
     return enfermeiros;
 };
 
+// Obtém um enfermeiro pelo COREN
 const getEnfermeiroByCOREN = async (COREN) => {
     const [enfermeiro] = await connection.execute('SELECT * FROM enfermeiros WHERE COREN = ?', [COREN]);
     return enfermeiro;
 }
 
+// Cria um novo enfermeiro no banco de dados
 const createEnfermeiro = async (enfermeiro) => {
     const { COREN, Nome, Email, Senha } = enfermeiro;
 
@@ -100,9 +115,9 @@ const createEnfermeiro = async (enfermeiro) => {
 
     await enviarEmailContaCriada(Email);
 
+    // Notifica os administradores
     const [admins] = await connection.execute('SELECT Email FROM administrador');
     const adminEmails = admins.map(admin => admin.Email);
-
     for(const adminEmail of adminEmails) {
         await enviarEmailPessoasPendentes(adminEmail);
     }
@@ -110,6 +125,7 @@ const createEnfermeiro = async (enfermeiro) => {
     return { createdEnfermeiro };
 };
 
+// Atualiza um enfermeiro pelo COREN
 const updateEnfermeiro = async (COREN, enfermeiro) => {
 
     const { Nome, Email, Senha, Situação } = enfermeiro;
@@ -120,21 +136,27 @@ const updateEnfermeiro = async (COREN, enfermeiro) => {
     return updatedEnfermeiro;
 };
 
+// Deleta um enfermeiro pelo COREN
 const deleteEnfermeiro = async (COREN) => {
     const [removedEnfermeiro] = await connection.execute('DELETE FROM enfermeiros where COREN = ?', [COREN]);
     return removedEnfermeiro;
 }
 
+// ====================== PACIENTES ======================
+
+// Obtém todos os pacientes
 const getAllPacientes = async () => {
     const pacientes = await connection.execute('SELECT * FROM pacientes');
     return pacientes;
 };
 
+// Obtém um paciente pelo email
 const getPacienteByEmail = async (Email) => {
     const [paciente] = await connection.execute('SELECT * FROM pacientes WHERE Email = ?', [Email]);
     return paciente;
 };
 
+// Cria um novo paciente
 const createPaciente = async (paciente) => {
     const { CPF, Nome, Email, Senha } = paciente;
 
@@ -158,6 +180,7 @@ const createPaciente = async (paciente) => {
     return { createdPaciente };
 };
 
+// Atualiza um paciente pelo Email
 const updatePaciente = async (Email, paciente) => {
 
     const { Nome, CPF, Senha, Situação } = paciente;
@@ -168,21 +191,27 @@ const updatePaciente = async (Email, paciente) => {
     return updatedPaciente;
 };
 
+// Deleta um paciente pelo email
 const deletePaciente = async (Email) => {
     const [removedPaciente] = await connection.execute('DELETE FROM pacientes where Email = ?', [Email]);
     return removedPaciente;
 }
 
+// ====================== ADMINISTRADORES ======================
+
+// Obtém todos os administradores
 const getAllAdministradores = async () => {
     const administradores = await connection.execute('SELECT * FROM administrador');
     return administradores;
 };
 
+// Obtém um administrador pelo email
 const getAdministradorByEmail = async (Email) => {
     const [admin] = await connection.execute('SELECT * FROM administrador WHERE Email = ?', [Email]);
     return admin;
 };
 
+// Cria um novo administrador
 const createAdministrador = async (administrador) => {
     const { CPF, Nome, Email, Senha } = administrador;
 
@@ -216,6 +245,7 @@ const createAdministrador = async (administrador) => {
     return { createdAdministrador };
 };
 
+// Atualiza um administrador pelo email
 const updateAdministrador = async (Email, administrador) => {
 
     const { Nome, CPF, Senha, Situação } = administrador;
@@ -226,11 +256,13 @@ const updateAdministrador = async (Email, administrador) => {
     return updatedAdministrador;
 };
 
+// Deleta um administrador pelo email
 const deleteAdministrador = async (Email) => {
     const [removedAdministrador] = await connection.execute('DELETE FROM administrador where Email = ?', [Email]);
     return removedAdministrador;
 }
 
+// Exporta todas as funções
 module.exports = {
     getAllMedicos,
     getMedicoByCRM,
