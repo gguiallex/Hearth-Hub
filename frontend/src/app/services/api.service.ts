@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://hearth-hub.vercel.app'; // URL base da API
+  private apiUrl = environment.apiUrl; // URL base da API
   private consultaAtualizada = new BehaviorSubject<boolean>(false); // Observable para monitorar atualizações de consulta
 
   constructor(private http: HttpClient) { }
