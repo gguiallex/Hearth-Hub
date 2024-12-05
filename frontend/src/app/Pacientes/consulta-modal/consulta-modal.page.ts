@@ -11,8 +11,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./consulta-modal.page.scss'],
 })
 export class ConsultaModalPage implements OnInit {
+
+  // Decoradores que recebem e emitem dados no modal
   @Input() consulta: any; // Recebe os detalhes da consulta como entrada
-  @Output() consultaMarcada = new EventEmitter();
+  @Output() consultaMarcada = new EventEmitter(); // Emite evento quando a consulta for marcada
 
   constructor(private modalController: ModalController, 
               private apiService: ApiService, 
@@ -21,6 +23,7 @@ export class ConsultaModalPage implements OnInit {
               ) { }
 
   ngOnInit() {
+    // Verifica se os detalhes da consulta foram recebidos ao inicializar o modal
     if (this.consulta) {
       console.log('Detalhes da consulta recebidos:', this.consulta);
     } else {
@@ -28,18 +31,20 @@ export class ConsultaModalPage implements OnInit {
     }
   }
 
+  // Fecha o modal
   fecharModal() {
     this.modalController.dismiss();
   }
 
+  // Confirma a marcação da consulta
   confirmarConsulta() {
     // Verifica se todos os parâmetros necessários estão definidos
     if (!this.consulta || !this.consulta.paciente || !this.consulta.medico || !this.consulta.dia || !this.consulta.horario) {
       console.error('Dados da consulta incompletos:', this.consulta);
-      // Exibe uma mensagem de erro para o usuário, se desejar
       return;
     }
  
+    // Estrutura a consulta com os dados necessários
     const consultaa = {
       CPF: this.consulta.paciente,
       CRM: this.consulta.medico,
@@ -47,25 +52,26 @@ export class ConsultaModalPage implements OnInit {
       Horario: this.consulta.horario
     }
   
+    // Envia a consulta para a API
     this.apiService.marcarConsulta(consultaa).subscribe(
       async (response) => {
-        // Se a consulta foi marcada com sucesso, exibe uma mensagem de sucesso e fecha o modal
+        // Exibe mensagem de sucesso ao usuário e fecha o modal
          await this.alertService.showAlert('Consulta marcada com sucesso!')
         console.log('Consulta marcada com sucesso:', response);
 
-        this.consultaMarcada.emit(true);
+        this.consultaMarcada.emit(true); // Emite o evento de consulta marcada para o componente pai
 
-        this.fecharModal();
+        this.fecharModal(); // Fecha o modal
 
+        // Redireciona para a página do paciente e recarrega a página
         this.router.navigate(['/paciente']).then(() => {
-          location.reload();  // Recarregar a página após o agendamento e redirecionamento
+          location.reload();
         });
       },
       async (error) => {
         // Se ocorreu algum erro ao marcar a consulta, exibe uma mensagem de erro
         await this.alertService.showAlert('Erro ao marcar consulta')
         console.error('Erro ao marcar consulta:', error);
-        // Aqui você pode exibir uma mensagem de erro para o usuário, se desejar
       }
     );
   }

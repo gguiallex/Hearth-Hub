@@ -8,66 +8,78 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://hearth-hub.vercel.app';
-  private consultaAtualizada = new BehaviorSubject<boolean>(false);
+  private apiUrl = 'https://hearth-hub.vercel.app'; // URL base da API
+  private consultaAtualizada = new BehaviorSubject<boolean>(false); // Observable para monitorar atualizações de consulta
 
   constructor(private http: HttpClient) { }
 
-    // Método para emitir o evento de consulta atualizada
-    emitirAtualizacaoConsulta() {
-      this.consultaAtualizada.next(true);
-    }
-  
-    // Método para obter o observable das atualizações
-    getAtualizacaoConsulta() {
-      return this.consultaAtualizada.asObservable();
-    }
+  // Emite um evento indicando que uma consulta foi atualizada.
+  emitirAtualizacaoConsulta() {
+    this.consultaAtualizada.next(true);
+  }
 
+  // Retorna um observable que notifica quando uma consulta foi atualizada.
+  getAtualizacaoConsulta() {
+    return this.consultaAtualizada.asObservable();
+  }
+
+  // Obtém a lista de especialidades.
   getEspecialidades(): Observable<{ CodEsp: string, Especialidade: string, desc: string }[]> {
     return this.http.get<{ CodEsp: string, Especialidade: string, desc: string }[]>(`${this.apiUrl}/especialidades`);
   }
 
+  // Retorna o total de especialidades.
   CountEspecialidades(): Observable<number> {
     return this.http.get<{ CodEsp: string, Especialidade: string, desc: string }[]>(`${this.apiUrl}/especialidades`).pipe(
       map(especialidades => especialidades.length)
     );
   }
 
+  // Obtém a lista de exames.
   getExames(): Observable<{ CodExames: string, Nome: string, Desc: string }[]> {
     return this.http.get<{ CodExames: string, Nome: string, Desc: string }[]>(`${this.apiUrl}/exames`);
   }
 
+  // Obtém detalhes de um exame pelo código.
   getExameByCod(CodExames: string): Observable<{ CodExames: string, Nome: string, Descrição: string }[]> {
     return this.http.get<{ CodExames: string, Nome: string, Descrição: string }[]>(`${this.apiUrl}/exame/${CodExames}`)
   }
 
+  // Conta o total de exames cadastrados.
   countExames(): Observable<number> {
     return this.http.get<{ CodExames: string, Nome: string, Desc: string }[]>(`${this.apiUrl}/exames`).pipe(
       map(exames => exames.length)
     );
   }
 
+  // Obtém a lista de exames prescritos.
   getExamesPresc(): Observable<{ IdConsulta: string, CodExames: string, CPF: string, CRM: string, COREN: string, DataPrescricao: string, DataRealizacao: string, Status: string }[]> {
     return this.http.get<{ IdConsulta: string, CodExames: string, CPF: string, CRM: string, COREN: string, DataPrescricao: string, DataRealizacao: string, Status: string }[]>(`${this.apiUrl}/examesPrescritos`);
   }
 
+  // Obtém exames prescritos por um enfermeiro específico.
   getExamesDoEnfermeiro(COREN: string): Observable<{ IdConsulta: string, CodExames: string, CPF: string, CRM: string, COREN: string, DataPrescricao: string, DataRealizacao: string, Status: string }[]> {
     return this.http.get<{ IdConsulta: string, CodExames: string, CPF: string, CRM: string, COREN: string, DataPrescricao: string, DataRealizacao: string, Status: string }[]>(`${this.apiUrl}/examesPrescritos/${COREN}`);
   }
 
+  // Obtém o total de exames pendentes.
   getTotalExamesPendentes(): Observable<number> {
     return this.getExamesPresc().pipe(
       map(exames => exames.filter(exame => exame.Status === 'Pendente').length)
     );
   }
 
-  atualizarExamesPresc(IdConsulta:string, CodExames:string, COREN: string, Status: string): Observable<any> {
+  // Atualiza o status de um exame prescrito.
+  atualizarExamesPresc(IdConsulta: string, CodExames: string, COREN: string, Status: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/examePrescrito/${IdConsulta}/${CodExames}`, { COREN, Status })
   }
 
+  // Obtém todos os médicos cadastrados.
   getMedicos(): Observable<{ CRM: string, Nome: string, Especialidade: string, Email: string, Senha: string, Situação: string }[]> {
     return this.http.get<{ CRM: string, Nome: string, Especialidade: string, Email: string, Senha: string, Situação: string }[]>(`${this.apiUrl}/medicos`);
   }
+
+  // Segue com outras funções semelhantes para CRUD de médicos, pacientes, enfermeiros, etc.
 
   getPacientes(): Observable<{ CPF: string, Nome: string, Email: string, Senha: string, Situação: string }[]> {
     return this.http.get<{ CPF: string, Nome: string, Email: string, Senha: string, Situação: string }[]>(`${this.apiUrl}/pacientes`);
@@ -121,16 +133,16 @@ export class ApiService {
     return this.http.get<{ CRM: string, Nome: string, Especialidade: string }[]>(`${this.apiUrl}/medicos/${CRM}`);
   }
 
-  getEnfermeiroByCOREN(COREN: string): Observable<{COREN:string, Nome: string}[]>{
-    return this.http.get<{ COREN: string, Nome: string}[]>(`${this.apiUrl}/enfermeiro/${COREN}`);
+  getEnfermeiroByCOREN(COREN: string): Observable<{ COREN: string, Nome: string }[]> {
+    return this.http.get<{ COREN: string, Nome: string }[]>(`${this.apiUrl}/enfermeiro/${COREN}`);
   }
 
   getEspecialidadeByCRM(CRM: string): Observable<{ especialidade: string }[]> {
     return this.http.get<{ especialidade: string }[]>(`${this.apiUrl}/especialidades/${CRM}`);
   }
 
-  getConsultas(): Observable<{ IdConsulta:string, CPF: string, CRM: string, data: string, Horario: string }[]> {
-    return this.http.get<{ IdConsulta:string, CPF: string, CRM: string, data: string, Horario: string }[]>(`${this.apiUrl}/consultas`);
+  getConsultas(): Observable<{ IdConsulta: string, CPF: string, CRM: string, data: string, Horario: string }[]> {
+    return this.http.get<{ IdConsulta: string, CPF: string, CRM: string, data: string, Horario: string }[]>(`${this.apiUrl}/consultas`);
   }
 
   marcarConsulta(consulta: any) {
@@ -148,7 +160,7 @@ export class ApiService {
   }
 
   criarExamePresc(IdConsulta: string, CodExames: string, CPF: string, CRM: string) {
-    return this.http.post<any>(`${this.apiUrl}/examePrescrito`, {IdConsulta, CodExames, CPF, CRM});
+    return this.http.post<any>(`${this.apiUrl}/examePrescrito`, { IdConsulta, CodExames, CPF, CRM });
   }
 
   atualizarEspecialidade(CodEsp: string, Especialidade: string, Descrição: string): Observable<any> {
@@ -222,14 +234,15 @@ export class ApiService {
     );
   }
 
-  getConsultasDoMedico(CRM: string): Observable<{ IdConsulta:string, CPF: string, CRM: string, data: string, Horario: string }[]> {
-    return this.http.get<{ IdConsulta:string, CPF: string, CRM: string, data: string, Horario: string }[]>(`${this.apiUrl}/consultas/medico/${CRM}`);
+  getConsultasDoMedico(CRM: string): Observable<{ IdConsulta: string, CPF: string, CRM: string, data: string, Horario: string }[]> {
+    return this.http.get<{ IdConsulta: string, CPF: string, CRM: string, data: string, Horario: string }[]>(`${this.apiUrl}/consultas/medico/${CRM}`);
   }
 
-  getConsultasDoPaciente(CPF: string): Observable<{ IdConsulta:string, CPF: string, CRM: string, data: string, Horario: string }[]> {
-    return this.http.get<{ IdConsulta:string, CPF: string, CRM: string, data: string, Horario: string }[]>(`${this.apiUrl}/consultas/paciente/${CPF}`);
+  getConsultasDoPaciente(CPF: string): Observable<{ IdConsulta: string, CPF: string, CRM: string, data: string, Horario: string }[]> {
+    return this.http.get<{ IdConsulta: string, CPF: string, CRM: string, data: string, Horario: string }[]>(`${this.apiUrl}/consultas/paciente/${CPF}`);
   }
 
+  // Solicita a redefinição de senha com base no e-mail.
   solicitarRecuperacaoSenha(email: string, perfil: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/recuperar-senha`, { email, Perfil: perfil });
   }
@@ -238,6 +251,7 @@ export class ApiService {
     return this.http.post(`${this.apiUrl}/gerar-token-confirmacao`, { email });
   }
 
+  // Redefine a senha usando um token.
   redefinirSenhaComToken(token: string, novaSenha: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/redefinir-senha`, { token, novaSenha });
   }

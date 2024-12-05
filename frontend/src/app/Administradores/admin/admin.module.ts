@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { AdminPageRoutingModule } from './admin-routing.module';
 
 import { AdminPage } from './admin.page';
-import { PopoverComponent } from '../../popover/popover.component';
 
 @NgModule({
   imports: [
@@ -16,6 +15,6 @@ import { PopoverComponent } from '../../popover/popover.component';
     IonicModule,
     AdminPageRoutingModule
   ],
-  declarations: [AdminPage, PopoverComponent]
+  declarations: [AdminPage]
 })
 export class AdminPageModule {}

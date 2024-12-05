@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class MarcarConsultaPage implements OnInit {
 
+  // Variáveis para armazenar especialidades, médicos e informações da consulta
   especialidades: { Especialidade: string }[] = [];
   selectedEspecialidade: string = '';
   medicos: { CRM: string, Nome: string }[] = [];
@@ -21,10 +22,10 @@ export class MarcarConsultaPage implements OnInit {
   selectedDate: string = '';
   selectedTime: string = '';
 
-  minDate: string = '';
-  maxDate: string = '';
+  minDate: string = ''; // Data mínima para seleção no calendário
+  maxDate: string = ''; // Data máxima para seleção no calendário
 
-  timeSlots: { time: string, available: boolean }[] = [];
+  timeSlots: { time: string, available: boolean }[] = []; // Lista de horários disponíveis
 
   constructor(private apiService: ApiService,
     private alertController: AlertController,
@@ -33,19 +34,19 @@ export class MarcarConsultaPage implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-
+    // Validação de acesso: verifica se o perfil é 'Paciente' e se está validado
     const situação = this.authService.getStatus();
     const perfil = this.authService.getProfile();
     if (perfil !== 'P' && situação !== 'Validado') {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login']); // Redireciona para login se inválido
     }
 
     this.carregarEspecialidades();
-    this.setMinMaxDates();
-    this.selectedDate = new Date().toISOString().split('T')[0];
+    this.setMinMaxDates(); // Define as datas mínimas e máximas para agendamento
+    this.selectedDate = new Date().toISOString().split('T')[0]; // Define a data inicial como hoje
   }
 
-  //Data minima e maxima do calendário
+  // Define a data mínima (hoje) e a máxima (3 meses no futuro)
   setMinMaxDates() {
     const today = new Date();
     const threeMonthsFromNow = new Date();
@@ -55,14 +56,14 @@ export class MarcarConsultaPage implements OnInit {
     this.maxDate = threeMonthsFromNow.toISOString().split('T')[0];
   }
 
-  // Finais de semana e horários de consulta inativos
+  // Verifica se uma data é um dia útil e se há horário disponível
   isWeekday = (dateString: string) => {
     const date = new Date(dateString);
     const utcDay = date.getUTCDay();
 
-    // Verifica se é final de semana
+    // Bloqueia sábados e domingos
     if (utcDay === 0 || utcDay === 6) {
-      return false; // Bloqueia sábado e domingo
+      return false;
     }
 
     // Verifica se a data está presente nas consultas do médico
@@ -71,26 +72,24 @@ export class MarcarConsultaPage implements OnInit {
     return !this.consultas.some(consulta => consulta.data === selectedISODate && consulta.hora === selectedTime);
   };
 
-  //seleciona Medico
+  // Manipula a mudança de médico selecionado
   onMedicoChange(event: any) {
     const selectedMedico = this.medicos.find(medico => medico.CRM === event.detail.value);
     if (selectedMedico) {
-      this.selectedMedicoNome = selectedMedico.Nome; // Armazena o nome do médico selecionado
+      this.selectedMedicoNome = selectedMedico.Nome;
     }
     this.selectedMedicoId = event.detail.value;
-    console.log(this.selectedMedicoId);
-    console.log(this.selectedMedicoNome);
-    this.buscarConsultasDoMedico(this.selectedMedicoId);
+    this.buscarConsultasDoMedico(this.selectedMedicoId); // Busca consultas marcadas para o médico
   }
 
-  //seleciona Data
+  // Manipula a mudança de data selecionada
   onDateChange(event: any) {
     this.selectedDate = new Date(event.detail.value).toISOString().split('T')[0];
-    console.log(this.selectedDate);
-    this.generateTimeSlots();
-    this.updateAvailableTimeSlots();
+    this.generateTimeSlots(); // Gera os horários disponíveis
+    this.updateAvailableTimeSlots(); // Atualiza a disponibilidade dos horários
   }
 
+  // Atualiza a disponibilidade de horários com base nas consultas existentes
   updateAvailableTimeSlots() {
     const consultasFiltradas = this.filtrarConsultasPorData(this.selectedDate);
     console.log("Consultas filtradas para a data selecionada:", consultasFiltradas);
@@ -104,21 +103,20 @@ export class MarcarConsultaPage implements OnInit {
       slot.available = !horarioConsulta; // Marque como indisponível se houver uma consulta no horário
     });
     console.log("Horários disponíveis após atualização:", this.timeSlots);
-}
+  }
 
-  //gera os horarios de atendimento
+  // Gera horários de atendimento em intervalos de 30 minutos
   generateTimeSlots() {
     this.timeSlots = [];
-
-    // Criação dos horários de 30 em 30 minutos
     for (let hour = 8; hour < 18; hour++) {
       this.timeSlots.push({ time: `${hour.toString().padStart(2, '0')}:00`, available: true });
       this.timeSlots.push({ time: `${hour.toString().padStart(2, '0')}:30`, available: true });
     }
-    
-    this.updateAvailableTimeSlots(); // Atualizar a disponibilidade
-}
 
+    this.updateAvailableTimeSlots();
+  }
+
+  // Carrega as especialidades disponíveis
   carregarEspecialidades() {
     this.apiService.getEspecialidades().subscribe(
       especialidades => {
@@ -130,6 +128,7 @@ export class MarcarConsultaPage implements OnInit {
     );
   }
 
+  // Busca médicos de acordo com a especialidade selecionada
   buscarMedicosPorEspecialidade() {
     if (this.selectedEspecialidade) {
       this.apiService.getMedicosPorEspecialidade(this.selectedEspecialidade).subscribe(
@@ -148,6 +147,7 @@ export class MarcarConsultaPage implements OnInit {
     }
   }
 
+  // Exibe um alerta com mensagem personalizada
   async mostrarAlerta(titulo: string, mensagem: string) {
     const alert = await this.alertController.create({
       header: titulo,
@@ -158,6 +158,7 @@ export class MarcarConsultaPage implements OnInit {
     await alert.present();
   }
 
+  // Limpa as seleções de especialidade, médico, data e horários
   limparSelecoes() {
     this.selectedEspecialidade = '';
     this.medicos = [];
@@ -166,6 +167,7 @@ export class MarcarConsultaPage implements OnInit {
     this.timeSlots = [];
   }
 
+  // Confirma a marcação da consulta e abre um modal de confirmação
   async marcarConsulta() {
 
     if (!this.selectedEspecialidade) {
@@ -201,29 +203,29 @@ export class MarcarConsultaPage implements OnInit {
       return;
     }
 
-    // Crie um objeto com os detalhes da consulta
+    // Cria um objeto com os detalhes da consulta
     const consulta = {
       paciente: cpf,
       nomePaciente: nome,
       especialidade: this.selectedEspecialidade,
       nomeMedico: this.selectedMedicoNome,
-      medico: this.selectedMedicoId,// Encontre o nome do médico com base no ID selecionado
-      dia: this.selectedDate, // Aqui você pode definir a data da consulta
-      horario: this.selectedTime // Aqui você pode definir o horário da consulta
+      medico: this.selectedMedicoId,
+      dia: this.selectedDate,
+      horario: this.selectedTime
     };
 
-    // Crie o modal com os detalhes da consulta
+    // Cria o modal com os detalhes da consulta
     const modal = await this.modalController.create({
       component: ConsultaModalPage,
       componentProps: {
-        consulta: consulta // Passe os detalhes da consulta como parâmetro
+        consulta: consulta // Passa os detalhes da consulta como parâmetro
       }
     });
 
     await modal.present();
   }
 
-  // Função para buscar consultas do médico selecionado
+  // Busca consultas já marcadas para o médico selecionado
   buscarConsultasDoMedico(medicoCRM: string) {
     if (!medicoCRM) return;
 
@@ -237,14 +239,14 @@ export class MarcarConsultaPage implements OnInit {
         console.error('Erro ao buscar consultas do médico:', error);
       }
     );
-}
+  }
 
+  // Filtra consultas pela data selecionada
   filtrarConsultasPorData(data: string) {
     const consultasFiltradas = this.consultas.filter(consulta => {
       const consultaDate = new Date(consulta.data).toISOString().split('T')[0];
       return consultaDate === data;
     });
-    console.log(consultasFiltradas);
     return consultasFiltradas;
   }
 
